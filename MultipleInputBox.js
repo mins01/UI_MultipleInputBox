@@ -108,7 +108,7 @@ var MultipleInputBox = (function(){
 				boxes.push(this.addRawTextBox(arr[i]))
 			}
 			mib.sync();
-			mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+			// mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 			return boxes;
 		}
 		/**
