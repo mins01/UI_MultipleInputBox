@@ -10,6 +10,12 @@
 */
 
 var MultipleInputBox = (function(){
+	/**
+	* init_create 초기화
+	* @param  {html_node} mib
+	* @param  {Object} opt config
+	* @return {html_node} mib
+	*/
 	var init_create = function(mib,opt){		
 		// mib.innerHTML = '<div class="multipleInputBox-boxes"></div><button class="multipleInputBox-btn multipleInputBox-btn-add"></button>'
 		var input = mib.querySelector("input,textarea");
@@ -30,13 +36,29 @@ var MultipleInputBox = (function(){
 			configurable: false //삭제 가능여부. writable 속성 변경 가능 여부
 		});
 	}
+	/**
+	* init_method 메소드 설정
+	* @param  {html_node} mib
+	* @param  {Object} opt config
+	*/
 	var init_method = function(mib,opt){
+		/**
+		* setOpt 설정
+		* @param  {Object} i_opt config
+		*/
 		mib.setOpt = function(i_opt){
 			opt = Object.assign(opt,i_opt)
 		}
+		/**
+		* removeAllTexts text 들 전부 삭제
+		*/
 		mib.removeAllTexts = function(){
 			mib.boxes.innerHTML = "";
 		}
+		/**
+		* getTexts 배열로 내용 가져오기
+		* @return {Array}
+		*/
 		mib.getTexts = function(){
 			var arr = [];
 			mib.querySelectorAll(".multipleInputBox-text").forEach(function(v,k){
@@ -44,20 +66,32 @@ var MultipleInputBox = (function(){
 			});;
 			return arr;
 		}
+		/**
+		 * getText 문자열로 내용 가져오기 (.value 와 같음)
+		 * @return {String} 
+		 */
 		mib.getText = function(){
 			return this.getTexts().join(opt.separator);
 		}
+		/**
+		 * setText Text값 설정하기(구분자로 자동 처리함)
+		 * @param  {String} txt 
+		 */
 		mib.setText = function(txt){
 			mib.addTextBoxes(txt.split(opt.separator))
 		}
-		mib.getJsonString = function(){
-			return JSON.stringify(this.getTexts());
-		}
+		/**
+		 * sync 데이터 싱크
+		 */
 		mib.sync = function(){
 			if(this.input){
 				this.input.value = this.getText();
 			}
 		}
+		/**
+		 * addTextBoxes 배열을 기준으로 여러 textbox 를 추가하기
+		 * @param  {Array} arr
+		 */
 		mib.addTextBoxes = function(arr){
 			var boxes = []
 			for(var i=0,m=arr.length;i<m;i++){
@@ -65,6 +99,12 @@ var MultipleInputBox = (function(){
 			}
 			return boxes;
 		}
+		/**
+		 * addTextBox textbox 추가하기
+		 * @param  {String} str   옵션
+		 * @param  {Boolean} force removeEmptyBox 무시 여부 설정
+		 * @return {[type]}       [description]
+		 */
 		mib.addTextBox = function(str,force){
 			if(str==undefined||str==null) str='';
 			if(!force && opt.removeEmptyBox && str.length==0){return;}
@@ -120,6 +160,11 @@ var MultipleInputBox = (function(){
 			return box;
 		}
 	}
+	/**
+	 * 이벤트 초기화
+	 * @param  {html_node} mib
+	 * @param  {Object} opt config
+	 */
 	var init_event = function(mib,opt){
 		mib.btnAdd.addEventListener('click',function(evt){
 			var box = mib.addTextBox("",true);
@@ -131,6 +176,12 @@ var MultipleInputBox = (function(){
 		})
 	}
 	
+	/**
+	 * 동작 함수
+	 * @param  {html_node} mib
+	 * @param  {Object} opt config
+	 * @return {html_node} mib
+	 */
 	return function(mib,opt){
 		opt = Object.assign({
 			"removeEmptyBox":false,
