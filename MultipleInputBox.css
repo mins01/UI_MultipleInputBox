@@ -1,11 +1,18 @@
 @charset "UTF-8";
 .multipleInputBox{
-	display: inline-block;
 	box-sizing: border-box;
+}
+.multipleInputBox-inline{
+	display: inline-block;
 }
 .multipleInputBox-boxes{
 	display: inline-block;
 	align-items: center; /* 세로 중앙 */
+}
+.multipleInputBox-boxes:empty::before{
+	content: "empty";
+	color:#999;
+	margin:0 0.2em;
 }
 .multipleInputBox-box{
 	display: inline-flex;
@@ -60,12 +67,12 @@
 	color: #fff;
 }
 .multipleInputBox-btn-remove::before{
-	content: "x"
+	content: "×"
 }
 .multipleInputBox-btn-add{
 	background-color: #54CC27;
 	color: #fff;	
 }
 .multipleInputBox-btn-add::before{
-	content: "+"
+	content: "＋"
 }

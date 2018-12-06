@@ -43,17 +43,11 @@ var MultipleInputBox = (function(){
 	*/
 	var init_method = function(mib){
 		/**
-		* setOpt 설정
-		* @param  {Object} i_opt config
-		*/
-		mib.setOpt = function(i_opt){
-			opt = Object.assign(opt,i_opt)
-		}
-		/**
 		* removeAllTexts text 들 전부 삭제
 		*/
 		mib.removeAllTexts = function(){
 			mib.boxes.innerHTML = "";
+			
 		}
 		/**
 		* getTexts 배열로 내용 가져오기
@@ -79,7 +73,7 @@ var MultipleInputBox = (function(){
 			
 		}
 		/**
-		 * setText Text값 설정하기(구분자로 자동 처리함)
+		 * setText Text값 설정하기(구분자로 자동 처리함)(.value=~~~ 와 같음)
 		 * @param  {String} txt 
 		 */
 		mib.setText = function(txt){
@@ -95,7 +89,7 @@ var MultipleInputBox = (function(){
 			
 		}
 		/**
-		 * sync 데이터 싱크
+		 * sync 데이터 싱크(속의 input에게 값을 다시 넣음)
 		 */
 		mib.sync = function(){
 			if(this.input){
@@ -113,6 +107,8 @@ var MultipleInputBox = (function(){
 				if(removeEmptyBox && arr[i].length==0){continue;}
 				boxes.push(this.addRawTextBox(arr[i]))
 			}
+			mib.sync();
+			mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 			return boxes;
 		}
 		/**
