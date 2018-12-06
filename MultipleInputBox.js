@@ -29,6 +29,13 @@ var MultipleInputBox = (function(){
 				this.input.value = this.getText();
 			}
 		}
+		mib.addTextBoxes = function(arr){
+			var boxes = []
+			for(var i=0,m=arr.length;i<m;i++){
+				boxes.push(this.addTextBox(arr[i]))
+			}
+			return boxes;
+		}
 		mib.addTextBox = function(str){
 			if(str==undefined||str==null) str='';
 			var box = document.createElement('div');
@@ -48,6 +55,7 @@ var MultipleInputBox = (function(){
 
 			mib.boxes.appendChild(box);
 			mib.sync();
+			mib.dispatchEvent((new CustomEvent('input',{bubbles: true, cancelable: true, detail: {}})));
 			return box;
 		}
 	}
@@ -58,6 +66,7 @@ var MultipleInputBox = (function(){
 		})
 		mib.addEventListener('input',function(evt){
 			this.sync();
+			if(this.input) this.input.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 		})
 	}
 	
@@ -67,9 +76,7 @@ var MultipleInputBox = (function(){
 		init_event(mib);
 		if(mib.input && mib.input.value.length>0){
 			var arr = mib.input.value.trim().split(",");
-			for(var i=0,m=arr.length;i<m;i++){
-				mib.addTextBox(arr[i])
-			}
+			mib.addTextBoxes(arr)
 		}
 		mib.sync();
 		return mib;

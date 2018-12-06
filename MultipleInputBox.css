@@ -1,7 +1,7 @@
 @charset "UTF-8";
 .multipleInputBox{
 	display: inline-block;
-	box-sizing: content-box;
+	box-sizing: border-box;
 }
 .multipleInputBox-boxes{
 	display: inline-block;
@@ -13,7 +13,7 @@
 	min-width:2em;
 	/* width:10em; */
 	position: relative;
-	box-sizing: content-box;
+	box-sizing: border-box;
 	vertical-align: middle;
 	margin:0 0.2em;
 
@@ -43,7 +43,7 @@
 	overflow: visible;
 	text-decoration: none;
 	white-space: nowrap;
-	box-sizing: content-box;
+	box-sizing: border-box;
 	border-bottom: 1px dashed #999;
 }
 .multipleInputBox-text *{
