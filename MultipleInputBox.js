@@ -16,7 +16,7 @@ var MultipleInputBox = (function(){
 	* @param  {Object} opt config
 	* @return {html_node} mib
 	*/
-	var init_create = function(mib,opt){		
+	var init_create = function(mib){		
 		// mib.innerHTML = '<div class="multipleInputBox-boxes"></div><button class="multipleInputBox-btn multipleInputBox-btn-add"></button>'
 		var input = mib.querySelector("input,textarea");
 		mib.input = input?input:null;;
@@ -41,7 +41,7 @@ var MultipleInputBox = (function(){
 	* @param  {html_node} mib
 	* @param  {Object} opt config
 	*/
-	var init_method = function(mib,opt){
+	var init_method = function(mib){
 		/**
 		* setOpt 설정
 		* @param  {Object} i_opt config
@@ -71,14 +71,28 @@ var MultipleInputBox = (function(){
 		 * @return {String} 
 		 */
 		mib.getText = function(){
-			return this.getTexts().join(opt.separator);
+			if(mib.hasAttribute('data-useJSON')){
+				return JSON.stringify(this.getTexts());
+			}else{
+				return this.getTexts().join(mib.getAttribute('data-separator')?mib.getAttribute('data-separator'):',');
+			}
+			
 		}
 		/**
 		 * setText Text값 설정하기(구분자로 자동 처리함)
 		 * @param  {String} txt 
 		 */
 		mib.setText = function(txt){
-			mib.addTextBoxes(txt.split(opt.separator))
+			try{
+				if(mib.hasAttribute('data-useJSON')){
+					mib.addTextBoxes(JSON.parse(txt));
+				}else{
+					mib.addTextBoxes(txt.split(mib.getAttribute('data-separator')?mib.getAttribute('data-separator'):','))
+				}
+			}catch(e){
+				console.log(e)
+			}
+			
 		}
 		/**
 		 * sync 데이터 싱크
@@ -94,8 +108,9 @@ var MultipleInputBox = (function(){
 		 */
 		mib.addTextBoxes = function(arr){
 			var boxes = []
+			var removeEmptyBox = mib.hasAttribute('data-removeEmptyBox');
 			for(var i=0,m=arr.length;i<m;i++){
-				if(opt.removeEmptyBox && arr[i].length==0){continue;}
+				if(removeEmptyBox && arr[i].length==0){continue;}
 				boxes.push(this.addRawTextBox(arr[i]))
 			}
 			return boxes;
@@ -120,12 +135,14 @@ var MultipleInputBox = (function(){
 			if(str==undefined||str==null) str='';
 			var box = document.createElement('div');
 			box.className ="multipleInputBox-box";
-			switch(opt.textType){
+			var textType = mib.getAttribute('data-textType')
+			if(!textType) textType = 'div';
+			switch(textType){
 				case "div":
 				var t =  '<div class="multipleInputBox-text" contenteditable="true"></div>';	
 				break;
 				default:
-				var t =  '<input type="'+opt.textType+'" class="multipleInputBox-text"></div>';	
+				var t =  '<input type="'+textType+'" class="multipleInputBox-text"></div>';	
 				break;
 				
 			}
@@ -136,9 +153,9 @@ var MultipleInputBox = (function(){
 			box.btnRemove = box.querySelector(".multipleInputBox-btn-remove");
 			box.text = box.querySelector(".multipleInputBox-text");
 			
-			if(opt.textType=='div'){
+			if(textType=='div'){
 				Object.defineProperty(box.text, 'value', {
-					get:function(){ return box.text.innerText; },
+					get:function(){ return box.text.innerText.replace(/\n/g,'');; },
 					set:function(txt){ box.text.innerText=txt; },
 					//value:"init", //기본값 (get,set 과 같이 사용불가)
 					//writable: true, //값 수정 가능여부 (get,set 과 같이 사용불가)
@@ -155,7 +172,7 @@ var MultipleInputBox = (function(){
 				mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
 			})
 			box.text.addEventListener('blur',function(evt){
-				if(opt.removeEmptyBox && this.value==""){
+				if(mib.hasAttribute('data-removeEmptyBox') && this.value==""){
 					box.parentNode.removeChild(box);
 					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 					mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
@@ -171,9 +188,9 @@ var MultipleInputBox = (function(){
 	 * @param  {html_node} mib
 	 * @param  {Object} opt config
 	 */
-	var init_event = function(mib,opt){
+	var init_event = function(mib){
 		mib.btnAdd.addEventListener('click',function(evt){
-			var box = mib.addRawTextBox();
+			var box = mib.addTextBox();
 			box.text.focus();
 		})
 		mib.addEventListener('input',function(evt){
@@ -188,19 +205,13 @@ var MultipleInputBox = (function(){
 	 * @param  {Object} opt config
 	 * @return {html_node} mib
 	 */
-	return function(mib,opt){
-		opt = Object.assign({
-			"removeEmptyBox":false,
-			"separator":",",
-			"textType":"div" //input,div
-		},opt)
-		init_create(mib,opt);
-		init_method(mib,opt);
-		init_event(mib,opt);
+	return function(mib){
+		init_create(mib);
+		init_method(mib);
+		init_event(mib);
 		if(mib.input && mib.input.value.length>0){
 			mib.value = mib.input.value;
 		}
-		
 		mib.sync();
 		return mib;
 	}

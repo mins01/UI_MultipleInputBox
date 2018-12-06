@@ -37,41 +37,66 @@
 
 	<script>
 	window.onload=function(evt){
-		var mib01 = MultipleInputBox(document.querySelector("#mib01"),{"removeEmptyBox":true});
-		mib01.addTextBox("test1");
-		mib01.addTextBox("test2");		
-		mib01.addTextBox("test3");
-		mib01.addEventListener('input',function(evt){
-			console.log(evt.type)
-			document.querySelector("#mib01-input").value = this.value;
-		})
-		mib01.addEventListener('change',function(evt){
-			console.log(evt.type)
-			document.querySelector("#mib01-input").value = this.value;
-		})
-		document.querySelector("#mib01-input").value = mib01.value;
-
-		var mib02 = MultipleInputBox(document.querySelector("#mib02"),{"textType":"range"});
-		mib02.addTextBox("test1");
-		mib02.addEventListener('input',function(evt){
-			console.log(evt.type)
-			document.querySelector("#mib02-input").value = this.value;
-		})
-		document.querySelector("#mib02-input").value = mib02.value;
+		
+		
+		var arr = document.querySelectorAll(".multipleInputBox");
+		for(var i=0,m=arr.length;i<m;i++){
+			var t = MultipleInputBox(arr[i]);
+			window[arr[i]]=t;
+			
+			t.addEventListener('input',function(evt){
+				console.log(evt.type)
+				document.querySelector("#"+evt.currentTarget.id+"-input").value = this.value;
+			})
+			t.addEventListener('change',function(evt){
+				console.log(evt.type)
+			})
+			document.querySelector("#"+arr[i].id+"-input").value = t.value;	
+		}
+		
+		document.querySelector("#mib01").addTextBox("test1")
+		document.querySelector("#mib01").addTextBox("test2")
+		document.querySelector("#mib01").addTextBox("test3")
+		
 	}
 	</script>
 	
 </head>
 <body>
 	<div class="container">
-		<h1>MultipleInputBox</h1>asdasd
+		<h1>MultipleInputBox</h1>
 		<hr />
+		<h2>.addTextBox()</h2>
 		<input type="text" oninput="mib01.value = this.value;" value="" id="mib01-input"  />
-		<div class="multipleInputBox" id="mib01"><input type="hidden" readOnly value="text,123,casd" /></div>
+		<div class="multipleInputBox" id="mib01"><input type="hidden" readOnly value="" /></div>
 		<hr />
+		<h2>@data-textType="div"</h2>
 		<input type="text" oninput="mib02.value = this.value;" value="" id="mib02-input"  />
-
-		<div class="multipleInputBox" id="mib02"><textarea readOnly style="display:none"></textarea></div>
+		<div class="multipleInputBox" data-textType="div" id="mib02"><textarea readOnly style="display:none">하늘이, 뭐라하더냐, 난들아냐</textarea></div>
+		<hr />
+		<h2>@data-textType="text"</h2>
+		<input type="text" oninput="mib03.value = this.value;" value="" id="mib03-input"  />
+		<div class="multipleInputBox" data-textType="text" id="mib03"><textarea readOnly style="display:none">하늘이, 뭐라하더냐, 난들아냐</textarea></div>
+		<hr />
+		<h2>@data-textType="number"</h2>
+		<input type="text" oninput="mib04.value = this.value;" value="" id="mib04-input"  />
+		<div class="multipleInputBox" data-textType="number" id="mib04"><input type="hidden" readOnly value="123.123,23545,das,123" /></div>
+		<hr />
+		<h2>@data-textType="range"</h2>
+		<input type="text" oninput="mib05.value = this.value;" value="" id="mib05-input"  />
+		<div class="multipleInputBox" data-textType="range" id="mib05"><input type="hidden" readOnly value="10,20,30,40" /></div>
+		<hr />
+		<h2>@data-removeEmptyBox //빈 textbox 자동삭제</h2>
+		<input type="text" oninput="mib06.value = this.value;" value="" id="mib06-input"  />
+		<div class="multipleInputBox" data-removeEmptyBox id="mib06"><input type="hidden" readOnly value="빈칸은,삭제,,,됩니다." /></div>
+		<hr />
+		<h2>@data-separator="^"  //문자열 구분자 변경</h2>
+		<input type="text" oninput="mib07.value = this.value;" value="" id="mib07-input"  />
+		<div class="multipleInputBox" data-separator="^" id="mib07"><input type="hidden" readOnly value="구분자가,에서^으로^바뀌었습니다." /></div>
+		<hr />
+		<h2>@data-useJSON  //serialize 처리에 JSON 사용</h2>
+		<input type="text" oninput="mib09.value = this.value;" value="" id="mib09-input"  />
+		<div class="multipleInputBox" data-useJSON id="mib09"><input type="hidden" readOnly value='[1,2,3,"한글","SBC"]' /></div>
 		
 	</div>
 </body>
