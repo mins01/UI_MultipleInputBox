@@ -95,19 +95,29 @@ var MultipleInputBox = (function(){
 		mib.addTextBoxes = function(arr){
 			var boxes = []
 			for(var i=0,m=arr.length;i<m;i++){
-				boxes.push(this.addTextBox(arr[i]))
+				if(opt.removeEmptyBox && arr[i].length==0){continue;}
+				boxes.push(this.addRawTextBox(arr[i]))
 			}
 			return boxes;
 		}
 		/**
-		 * addTextBox textbox 추가하기
+		 * addTextBox textbox 추가하기 (처리 이벤트가 추가됨)
 		 * @param  {String} str   옵션
-		 * @param  {Boolean} force removeEmptyBox 무시 여부 설정
-		 * @return {[type]}       [description]
+		 * @return {html_node}
 		 */
-		mib.addTextBox = function(str,force){
+		mib.addTextBox = function(str){
+			var box = this.addRawTextBox(str);
+			mib.sync();
+			mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+			return box;
+		}
+		/**
+		 * addRawTextBox textbox 추가하기
+		 * @param  {String} str   옵션
+		 * @return {html_node}
+		 */
+		mib.addRawTextBox = function(str){
 			if(str==undefined||str==null) str='';
-			if(!force && opt.removeEmptyBox && str.length==0){return;}
 			var box = document.createElement('div');
 			box.className ="multipleInputBox-box";
 			switch(opt.textType){
@@ -151,12 +161,8 @@ var MultipleInputBox = (function(){
 					mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
 				}
 			});
-			// box.text.addEventListener('change',function(evt){
-			// 	mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
-			// });
 			mib.boxes.appendChild(box);
-			mib.sync();
-			mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+			mib.dispatchEvent((new CustomEvent('addtextbox',{bubbles: false, cancelable: false, detail: {}})));			
 			return box;
 		}
 	}
@@ -167,7 +173,7 @@ var MultipleInputBox = (function(){
 	 */
 	var init_event = function(mib,opt){
 		mib.btnAdd.addEventListener('click',function(evt){
-			var box = mib.addTextBox("",true);
+			var box = mib.addRawTextBox();
 			box.text.focus();
 		})
 		mib.addEventListener('input',function(evt){
