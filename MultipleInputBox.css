@@ -56,9 +56,13 @@
 }
 .multipleInputBox-text *{
 	display: inline-block;
-	text-decoration: none;font-weight: normal;font-style: normal;
-	
+	text-decoration: none;font-weight: normal;font-style: normal;	
 }
+.multipleInputBox-text:focus + .multipleInputBox-btns{
+	opacity: 0.2;
+	pointer-events: none;
+}
+
 .multipleInputBox-btn-remove{
 	font-size: 0.7em;
 	width: auto; padding:0 0.2em;
