@@ -23,7 +23,7 @@ var MultipleInputBox = (function(){
 		
 		Object.defineProperty(mib, 'value', {
 			get:function(){ return mib.getText(); },
-			set:function(txt){ mib.setText(txt); },
+			set:function(txt){ mib.removeAllTexts();mib.setText(txt); },
 			//value:"init", //기본값 (get,set 과 같이 사용불가)
 			//writable: true, //값 수정 가능여부 (get,set 과 같이 사용불가)
 			enumerable: true, //목록 열거시 표시여부
@@ -31,18 +31,24 @@ var MultipleInputBox = (function(){
 		});
 	}
 	var init_method = function(mib,opt){
+		mib.setOpt = function(i_opt){
+			opt = Object.assign(opt,i_opt)
+		}
+		mib.removeAllTexts = function(){
+			mib.boxes.innerHTML = "";
+		}
 		mib.getTexts = function(){
 			var arr = [];
 			mib.querySelectorAll(".multipleInputBox-text").forEach(function(v,k){
-				arr.push(v.innerText);
+				arr.push(v.value);
 			});;
 			return arr;
 		}
 		mib.getText = function(){
-			return this.getTexts().toString();
+			return this.getTexts().join(opt.separator);
 		}
 		mib.setText = function(txt){
-			mib.addTextBoxes(txt.split(","))
+			mib.addTextBoxes(txt.split(opt.separator))
 		}
 		mib.getJsonString = function(){
 			return JSON.stringify(this.getTexts());
@@ -59,36 +65,64 @@ var MultipleInputBox = (function(){
 			}
 			return boxes;
 		}
-		mib.addTextBox = function(str){
+		mib.addTextBox = function(str,force){
 			if(str==undefined||str==null) str='';
+			if(!force && opt.removeEmptyBox && str.length==0){return;}
 			var box = document.createElement('div');
 			box.className ="multipleInputBox-box";
-			box.innerHTML = '<div class="multipleInputBox-text" contenteditable="true">'+str+'</div>'+
-			'<div class="multipleInputBox-btns">'+
+			switch(opt.textType){
+				case "div":
+				var t =  '<div class="multipleInputBox-text" contenteditable="true"></div>';	
+				break;
+				default:
+				var t =  '<input type="'+opt.textType+'" class="multipleInputBox-text"></div>';	
+				break;
+				
+			}
+			t+='<div class="multipleInputBox-btns">'+
 			'<button class="multipleInputBox-btn multipleInputBox-btn-remove"></button>'+
-			'</div>'
+			'</div>';
+			box.innerHTML = t;
 			box.btnRemove = box.querySelector(".multipleInputBox-btn-remove");
 			box.text = box.querySelector(".multipleInputBox-text");
+			
+			if(opt.textType=='div'){
+				Object.defineProperty(box.text, 'value', {
+					get:function(){ return box.text.innerText; },
+					set:function(txt){ box.text.innerText=txt; },
+					//value:"init", //기본값 (get,set 과 같이 사용불가)
+					//writable: true, //값 수정 가능여부 (get,set 과 같이 사용불가)
+					enumerable: true, //목록 열거시 표시여부
+					configurable: false //삭제 가능여부. writable 속성 변경 가능 여부
+				});	
+			}
+			box.text.value=str
 			
 			
 			box.btnRemove.addEventListener('click',function(evt){
 				box.parentNode.removeChild(box);
-				mib.dispatchEvent((new CustomEvent('input',{bubbles: true, cancelable: true, detail: {}})));
+				mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+				mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
 			})
 			box.text.addEventListener('blur',function(evt){
-				if(opt.removeEmptyBox && this.innerText==""){
+				if(opt.removeEmptyBox && this.value==""){
 					box.parentNode.removeChild(box);
+					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+					mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
 				}
-			})
+			});
+			// box.text.addEventListener('change',function(evt){
+			// 	mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
+			// });
 			mib.boxes.appendChild(box);
 			mib.sync();
-			mib.dispatchEvent((new CustomEvent('input',{bubbles: true, cancelable: true, detail: {}})));
+			mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 			return box;
 		}
 	}
 	var init_event = function(mib,opt){
 		mib.btnAdd.addEventListener('click',function(evt){
-			var box = mib.addTextBox();
+			var box = mib.addTextBox("",true);
 			box.text.focus();
 		})
 		mib.addEventListener('input',function(evt){
@@ -99,9 +133,10 @@ var MultipleInputBox = (function(){
 	
 	return function(mib,opt){
 		opt = Object.assign({
-			"removeEmptyBox":false
+			"removeEmptyBox":false,
+			"separator":",",
+			"textType":"div" //input,div
 		},opt)
-		if(!opt) opt = {}
 		init_create(mib,opt);
 		init_method(mib,opt);
 		init_event(mib,opt);
@@ -118,16 +153,16 @@ var MultipleInputBox = (function(){
 
 
 (function () {
-  if ( typeof window.CustomEvent === "function" ) return false; //If not IE
-  
-  function CustomEvent ( event, params ) {
-    params = params || { bubbles: false, cancelable: false, detail: undefined };
-    var evt = document.createEvent( 'CustomEvent' );
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-    return evt;
-  }
-  
-  CustomEvent.prototype = window.Event.prototype;
-  
-  window.CustomEvent = CustomEvent;
+	if ( typeof window.CustomEvent === "function" ) return false; //If not IE
+	
+	function CustomEvent ( event, params ) {
+		params = params || { bubbles: false, cancelable: false, detail: undefined };
+		var evt = document.createEvent( 'CustomEvent' );
+		evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+		return evt;
+	}
+	
+	CustomEvent.prototype = window.Event.prototype;
+	
+	window.CustomEvent = CustomEvent;
 })();

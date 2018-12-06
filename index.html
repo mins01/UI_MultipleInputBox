@@ -42,13 +42,22 @@
 		mib01.addTextBox("test2");		
 		mib01.addTextBox("test3");
 		mib01.addEventListener('input',function(evt){
-			console.log('t');
-			document.querySelector("#mib01-input").value = this.getText();
+			console.log(evt.type)
+			document.querySelector("#mib01-input").value = this.value;
 		})
-		document.querySelector("#mib01-input").value = mib01.getText();
+		mib01.addEventListener('change',function(evt){
+			console.log(evt.type)
+			document.querySelector("#mib01-input").value = this.value;
+		})
+		document.querySelector("#mib01-input").value = mib01.value;
 
-		var mib02 = MultipleInputBox(document.querySelector("#mib02"));
+		var mib02 = MultipleInputBox(document.querySelector("#mib02"),{"textType":"range"});
 		mib02.addTextBox("test1");
+		mib02.addEventListener('input',function(evt){
+			console.log(evt.type)
+			document.querySelector("#mib02-input").value = this.value;
+		})
+		document.querySelector("#mib02-input").value = mib02.value;
 	}
 	</script>
 	
@@ -57,9 +66,11 @@
 	<div class="container">
 		<h1>MultipleInputBox</h1>asdasd
 		<hr />
-		<input type="text" readOnly value="" id="mib01-input" />
+		<input type="text" oninput="mib01.value = this.value;" value="" id="mib01-input"  />
 		<div class="multipleInputBox" id="mib01"><input type="hidden" readOnly value="text,123,casd" /></div>
 		<hr />
+		<input type="text" oninput="mib02.value = this.value;" value="" id="mib02-input"  />
+
 		<div class="multipleInputBox" id="mib02"><textarea readOnly style="display:none"></textarea></div>
 		
 	</div>
