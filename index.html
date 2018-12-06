@@ -37,14 +37,16 @@
 
 	<script>
 	window.onload=function(evt){
-		var mib01 = MultipleInputBox(document.querySelector("#mib01"));
+		var mib01 = MultipleInputBox(document.querySelector("#mib01"),{"removeEmptyBox":true});
 		mib01.addTextBox("test1");
 		mib01.addTextBox("test2");		
 		mib01.addTextBox("test3");
-		
 		mib01.addEventListener('input',function(evt){
-			
+			console.log('t');
+			document.querySelector("#mib01-input").value = this.getText();
 		})
+		document.querySelector("#mib01-input").value = mib01.getText();
+
 		var mib02 = MultipleInputBox(document.querySelector("#mib02"));
 		mib02.addTextBox("test1");
 	}
@@ -55,9 +57,10 @@
 	<div class="container">
 		<h1>MultipleInputBox</h1>asdasd
 		<hr />
-		<div class="multipleInputBox" id="mib01"><input type="text" oninput="console.log('x')" readOnly value="text,123,casd" /></div>
+		<input type="text" readOnly value="" id="mib01-input" />
+		<div class="multipleInputBox" id="mib01"><input type="hidden" readOnly value="text,123,casd" /></div>
 		<hr />
-		<div class="multipleInputBox" id="mib02"><textarea readOnly></textarea></div>
+		<div class="multipleInputBox" id="mib02"><textarea readOnly style="display:none"></textarea></div>
 		
 	</div>
 </body>
