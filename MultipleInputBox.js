@@ -79,9 +79,9 @@ var MultipleInputBox = (function(){
 		mib.setText = function(txt){
 			try{
 				if(mib.hasAttribute('data-useJSON')){
-					mib.addTextBoxes(JSON.parse(txt));
+					mib.addInputBoxes(JSON.parse(txt));
 				}else{
-					mib.addTextBoxes(txt.split(mib.getAttribute('data-separator')?mib.getAttribute('data-separator'):','))
+					mib.addInputBoxes(txt.split(mib.getAttribute('data-separator')?mib.getAttribute('data-separator'):','))
 				}
 			}catch(e){
 				console.log(e)
@@ -97,10 +97,10 @@ var MultipleInputBox = (function(){
 			}
 		}
 		/**
-		 * addTextBoxes 배열을 기준으로 여러 textbox 를 추가하기
+		 * addInputBoxes 배열을 기준으로 여러 textbox 를 추가하기
 		 * @param  {Array} arr
 		 */
-		mib.addTextBoxes = function(arr){
+		mib.addInputBoxes = function(arr){
 			var boxes = []
 			var removeEmptyBox = mib.hasAttribute('data-removeEmptyBox');
 			for(var i=0,m=arr.length;i<m;i++){
@@ -112,11 +112,11 @@ var MultipleInputBox = (function(){
 			return boxes;
 		}
 		/**
-		 * addTextBox textbox 추가하기 (처리 이벤트가 추가됨)
+		 * addInputBox textbox 추가하기 (처리 이벤트가 추가됨)
 		 * @param  {String} str   옵션
 		 * @return {html_node}
 		 */
-		mib.addTextBox = function(str){
+		mib.addInputBox = function(str){
 			var box = this.addRawTextBox(str);
 			mib.sync();
 			mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
@@ -186,7 +186,7 @@ var MultipleInputBox = (function(){
 	 */
 	var init_event = function(mib){
 		mib.btnAdd.addEventListener('click',function(evt){
-			var box = mib.addTextBox();
+			var box = mib.addInputBox();
 			box.text.focus();
 		})
 		mib.addEventListener('input',function(evt){

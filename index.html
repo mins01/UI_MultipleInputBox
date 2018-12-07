@@ -54,9 +54,9 @@
 			document.querySelector("#"+arr[i].id+"-input").value = t.value;	
 		}
 		
-		document.querySelector("#mib01").addTextBox("test1")
-		document.querySelector("#mib01").addTextBox("test2")
-		document.querySelector("#mib01").addTextBox("test3")
+		document.querySelector("#mib01").addInputBox("test1")
+		document.querySelector("#mib01").addInputBox("test2")
+		document.querySelector("#mib01").addInputBox("test3")
 		
 	}
 	</script>
@@ -81,8 +81,8 @@
 			<li>.getText 문자열로 내용 가져오기 (.value 와 같음)</li>
 			<li>.setText Text값 설정하기(구분자로 자동 처리함)(.value=~~~ 와 같음)</li>
 			<li>.sync 데이터 싱크(속의 input에게 값을 다시 넣음)</li>
-			<li>.addTextBoxes 배열을 기준으로 여러 textbox 를 추가하기</li>
-			<li>.addTextBox textbox 추가하기 (처리 이벤트가 추가됨)</li>
+			<li>.addInputBoxes 배열을 기준으로 여러 textbox 를 추가하기</li>
+			<li>.addInputBox textbox 추가하기 (처리 이벤트가 추가됨)</li>
 			<li>.addRawTextBox textbox 추가하기</li>	
 		</ul>
 		
@@ -97,13 +97,13 @@
 			<li>addtextbox textbox 가 추가 될 때마다</li>
 		</ul>
 		<hr />
-		<h2>.addTextBox()</h2>
+		<h2>.addInputBox()</h2>
 		<input type="text" oninput="mib01.value = this.value;" value="" id="mib01-input"  />
 		<div class="multipleInputBox" id="mib01"><input type="hidden" readOnly value="" /></div>
 		<button onclick="alert(mib01.value)">.value</button>
 		<button onclick="mib01.value='123,5421'">.value="123,5421"</button>
-		<button onclick="mib01.addTextBox('test')">.addTextBox('test')</button>
-		<button onclick="mib01.addTextBox()">.addTextBox()</button>
+		<button onclick="mib01.addInputBox('test')">.addInputBox('test')</button>
+		<button onclick="mib01.addInputBox()">.addInputBox()</button>
 		<hr />
 		<h2>@data-textType="div" //자동으로 너비가 늘어남</h2>
 		<input type="text" oninput="mib02.value = this.value;" value="" id="mib02-input"  />
