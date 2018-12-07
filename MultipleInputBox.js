@@ -230,7 +230,16 @@ var MultipleInputBox = (function(){
 			});
 			box.text.addEventListener('keydown',function(evt){
 				if(mib.hasAttribute('data-autoAddInputBox') && (evt.which==9 || evt.which==13 )){ //TAB , ENTER
-					mib.addInputBox().text.focus();
+					if(evt.shiftKey && !this.box.previousElementSibling){
+					 return;
+				 }else
+					if(!evt.shiftKey && this.box.nextElementSibling){
+						this.box.nextElementSibling.text.focus()
+					}else if(evt.shiftKey && this.box.previousElementSibling){
+						this.box.previousElementSibling.text.focus()
+					}else{
+						mib.addInputBox().text.focus();
+					}					
 					evt.stopPropagation();
 					evt.preventDefault();
 					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
@@ -263,6 +272,20 @@ var MultipleInputBox = (function(){
 					evt.preventDefault();
 					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 					return false;
+				}else if(evt.which==37 && evt.ctrlKey ){ //왼쪽
+					if(this.box.previousElementSibling){
+						this.box.previousElementSibling.text.focus();
+						evt.stopPropagation();
+						evt.preventDefault();
+						return false;
+					}
+				}else if(evt.which==39 && evt.ctrlKey){ //오르쪽
+					if(this.box.nextElementSibling){
+						this.box.nextElementSibling.text.focus();
+						evt.stopPropagation();
+						evt.preventDefault();
+						return false;
+					}
 				}
 				
 			});

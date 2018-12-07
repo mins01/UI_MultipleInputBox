@@ -129,7 +129,8 @@
 				<li>data-useJSON //데이터 serialize 처리시 json 방식을 사용한다.</li>
 				<li>data-min //inputbox의 최소수 (data-removeEmptyBox 적용 시 동작 안한다!)</li>
 				<li>data-max //inputbox의 최대수</li>
-				<li>data-autoAddInputBox //x탭 or 엔터할 때 자동으로 inputbox를 새로 추가</li>
+				<li>data-autoAddInputBox //tab or enter시 자동으로 inputbox를 새로 추가</li>
+				<li>data-autoRemoveInputBox //delete, backspace 시 자동 삭제</li>
 
 			</ul>	
 			<h2>customEvent</h2>
@@ -139,6 +140,10 @@
 			<h2>CSS</h2>
 			<ul>
 				<li>.multipleInputBox-inline // inline-block 으로 보여짐</li>
+			</ul>	
+			<h2>ETC</h2>
+			<ul>
+				<li>ctrl + leftarrow ,ctrl + rightarrow 로 inputbox간 이동 가능 </li>
 			</ul>	
 		</code>
 		<hr />
@@ -217,7 +222,7 @@
 		
 		<h2> data-autoAddInputBox & data-autoRemoveInputBox </h2>
 		<input type="text" oninput="mib18.value = this.value;" value="" id="mib18-input"  />
-		<div class="multipleInputBox" data-autoAddInputBox data-autoRemoveInputBox id="mib18"><input type="hidden" readOnly value="TEST,TAB,ENTER,TEST,BACKSPACE,DELETE" /></div>
+		<div class="multipleInputBox" data-min="3" data-max="10" data-autoAddInputBox data-autoRemoveInputBox id="mib18"><input type="hidden" readOnly value="TEST,TAB,ENTER,TEST,BACKSPACE,DELETE" /></div>
 		
 	</div>
 </body>
