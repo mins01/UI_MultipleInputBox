@@ -16,10 +16,10 @@ var MultipleInputBox = (function(){
 	* @param  {Object} opt config
 	* @return {html_node} mib
 	*/
-	var init_create = function(mib){		
+	var init = function(mib){		
 		// mib.innerHTML = '<div class="multipleInputBox-boxes"></div><button class="multipleInputBox-btn multipleInputBox-btn-add"></button>'
-		var input = mib.querySelector("input,textarea");
-		mib.input = input?input:null;;
+		// var input = mib.querySelector("input,textarea");
+		// mib.input = input?input:null;;
 		mib.boxes = document.createElement('div');
 		mib.boxes.className="multipleInputBox-boxes";
 		mib.btnAdd = document.createElement('button');
@@ -28,13 +28,13 @@ var MultipleInputBox = (function(){
 		mib.appendChild(mib.btnAdd)
 		
 
-	}
+
 	/**
 	* init_method 메소드 설정
 	* @param  {html_node} mib
 	* @param  {Object} opt config
 	*/
-	var init_method = function(mib){
+
 		/**
 		* removeAllTexts text 들 전부 삭제
 		*/
@@ -77,26 +77,43 @@ var MultipleInputBox = (function(){
 		 * @param  {String} txt 
 		 */
 		var setText = function(txt){
+			removeAllTexts();
+			if(txt==""){return;}
+			
+			var max = mib.hasAttribute('data-max')?parseInt(mib.getAttribute('data-max')):-1
+			var min = mib.hasAttribute('data-min')?parseInt(mib.getAttribute('data-min')):-1
+
 			try{
 				if(mib.hasAttribute('data-useJSON')){
-					mib.addInputBoxes(JSON.parse(txt));
+					var arr = JSON.parse(txt)
 				}else{
-					mib.addInputBoxes(txt.split(mib.hasAttribute('data-separator')?mib.getAttribute('data-separator'):','))
+					var arr = txt.split(mib.hasAttribute('data-separator')?mib.getAttribute('data-separator'):',');
+				}
+				if(max>0 && arr.length>max){
+					arr = arr.splice(0,max);
+					mib.addInputBoxes(arr);
+					throw "Maximum number exceeded";
+				}else if(min>0 && arr.length<min){
+					arr = arr.concat(Array(min-arr.length));
+					mib.addInputBoxes(arr);
+					throw "Minimum number exceeded";
+				}else{
+					mib.addInputBoxes(arr);
 				}
 			}catch(e){
 				console.log(e)
 			}
-			
 		}
 		/**
 		 * sync 데이터 싱크(속의 input에게 값을 다시 넣음)
 		 */
-		mib.sync = function(toMib){
-			if(this.input){
+		var sync = function(toMib){
+			var input = mib.querySelector("input,textarea");
+			if(input){
 				if(toMib){
-					this.value = this.input.value;
+					mib.value = input.value;
 				}else{
-					this.input.value = this.value;
+					input.value = mib.value;
 				}
 			}
 		}
@@ -111,7 +128,7 @@ var MultipleInputBox = (function(){
 				if(removeEmptyBox && arr[i].length==0){continue;}
 				boxes.push(this.addRawTextBox(arr[i]))
 			}
-			mib.sync(false);
+			sync(false);
 			// mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 			return boxes;
 		}
@@ -184,35 +201,39 @@ var MultipleInputBox = (function(){
 		
 		Object.defineProperty(mib, 'value', {
 			get:function(){ return getText(); },
-			set:function(txt){ removeAllTexts();setText(txt); },
+			set:function(txt){ return setText(txt); },
 			//value:"init", //기본값 (get,set 과 같이 사용불가)
 			//writable: true, //값 수정 가능여부 (get,set 과 같이 사용불가)
 			enumerable: true, //목록 열거시 표시여부
 			configurable: false //삭제 가능여부. writable 속성 변경 가능 여부
 		});
 		Object.defineProperty(mib, 'length', {
-			get:function(){ return getText(); },
+			get:function(){ return this.getInputBoxes().length; },
 			set:function(txt){ },
 			//value:"init", //기본값 (get,set 과 같이 사용불가)
 			//writable: true, //값 수정 가능여부 (get,set 과 같이 사용불가)
 			enumerable: true, //목록 열거시 표시여부
 			configurable: false //삭제 가능여부. writable 속성 변경 가능 여부
 		});
-	}
+		
+
 	/**
 	 * 이벤트 초기화
 	 * @param  {html_node} mib
 	 * @param  {Object} opt config
 	 */
-	var init_event = function(mib){
+
 		mib.btnAdd.addEventListener('click',function(evt){
 			var box = mib.addInputBox();
 			box.text.focus();
 		})
 		mib.addEventListener('input',function(evt){
-			this.sync(false);
-			if(this.input) this.input.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+			sync(false);
+			var input = mib.querySelector("input,textarea");
+			if(input) input.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 		})
+		
+		sync(true); //초기화
 	}
 	
 	/**
@@ -222,10 +243,8 @@ var MultipleInputBox = (function(){
 	 * @return {html_node} mib
 	 */
 	return function(mib){
-		init_create(mib);
-		init_method(mib);
-		init_event(mib);
-		mib.sync(true);
+		init(mib);
+	
 		return mib;
 	}
 })();

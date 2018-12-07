@@ -56,7 +56,7 @@
 			})
 			document.querySelector("#"+arr[i].id+"-input").value = t.value;	
 		}
-		
+		document.querySelector("#mib01").value="";
 		document.querySelector("#mib01").addInputBox("test1")
 		document.querySelector("#mib01").addInputBox("test2")
 		document.querySelector("#mib01").addInputBox("test3")
@@ -84,7 +84,7 @@
 				<li>.toArray(); 배열로 내용 가져오기</li>
 				<!-- <li>.getText 문자열로 내용 가져오기 (.value 와 같음)</li> -->
 				<!-- <li>.setText Text값 설정하기(구분자로 자동 처리함)(.value=~~~ 와 같음)</li> -->
-				<li>.sync(toMib) 데이터 싱크(false:속의 input에게 값을 다시 넣음,true:input에서 값을 가져와서 적용함)</li>
+				<!-- <li>.sync(toMib) 데이터 싱크(false:속의 input에게 값을 다시 넣음,true:input에서 값을 가져와서 적용함)</li> -->
 				<li>.addInputBoxes(Array) 배열을 기준으로 여러 inputbox 를 추가하기</li>
 				<li>.addInputBox([str]) inputbox 추가하기 (처리 이벤트가 추가됨)</li>
 				<li>.addRawTextBox([str]) inputbox 추가하기</li>
@@ -95,18 +95,20 @@
 			<h2>property</h2>
 			<ul>
 				<li>.value INPUT.value 와 같은 동작을 한다.(내부적으로 .setText,.getText)</li>
+				<li>.length inputbox의 갯수 반환</li>
 			</ul>
 			<h2>attribute</h2>
 			<ul>
-				<li>data-textType=type //div(기본),text,number 등 추가되는 inputBox 의 타입 설정</li>
+				<li>data-textType="type" //div(기본),text,number 등 추가되는 inputBox 의 타입 설정</li>
 				<li>data-removeEmptyBox //빈 inputbox 자동 삭제</li>
-				<li>data-separator //문자열 구분자(기본:,)</li>
+				<li>data-separator="," //문자열 구분자(기본:,)</li>
 				<li>data-useJSON //데이터 serialize 처리시 json 방식을 사용한다.</li>
-				<li>data-useJSON //데이터 serialize 처리시 json 방식을 사용한다.</li>
+				<li>data-min //inputbox의 최소수 (data-removeEmptyBox 적용 시 동작 안한다!)</li>
+				<li>data-max //inputbox의 최대수</li>
 			</ul>	
 			<h2>customEvent</h2>
 			<ul>
-				<li>addinputbox inputbox 가 추가 될 때마다</li>
+				<li>addinputbox //inputbox 가 추가 될 때마다. 사용하지 마라.. 어떻게 될지 모르겠다.</li>
 			</ul>
 			<h2>CSS</h2>
 			<ul>
@@ -119,6 +121,8 @@
 		<div class="multipleInputBox" id="mib01"><input type="hidden" readOnly value="" /></div>
 		<button onclick="alert(mib01.value)">.value</button>
 		<button onclick="mib01.value='123,5421'">.value="123,5421"</button>
+		<button onclick="alert(mib01.length)">.length</button>
+		<button onclick="alert(mib01.getInputBoxes());console.log(mib01.getInputBoxes())">.getInputBoxes()</button>
 		<button onclick="mib01.addInputBox('test')">.addInputBox('test')</button>
 		<button onclick="mib01.addInputBox()">.addInputBox()</button>
 		<hr />
@@ -158,7 +162,10 @@
 		<input type="text" oninput="mib11.value = this.value;" value="" id="mib11-input"  /><br />
 		인라인으로도 동작이 됩니다.<div class="multipleInputBox multipleInputBox-inline" id="mib11"><input type="hidden" readOnly value='multipleInputBox-inline 사용' /></div>
 		인라인으로도 동작이 됩니다.
-		
+		<hr />
+		<h2> data-min="3" data-max="5" //inputbox 의 최수/최대 갯수</h2>
+		<input type="text" oninput="mib12.value = this.value;" value="" id="mib12-input"  />
+		<div class="multipleInputBox" data-min="3" data-max="5" id="mib12"><input type="hidden" readOnly value="동해물과,백두산이,마르고,닳도록,하느님이,보우하사,우리나라,만세,무궁화" /></div>		
 	</div>
 </body>
 </html>
