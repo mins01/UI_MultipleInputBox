@@ -41,7 +41,30 @@
 		
 		var arr = document.querySelectorAll(".multipleInputBox");
 		for(var i=0,m=arr.length;i<m;i++){
-			var t = MultipleInputBox(arr[i]);
+			
+			if(arr[i].id=='mib13'){
+				var cfg = {}
+				cfg.customInputBox = '<input type="text" placeholder="input here" style="background-color:#abc" />';
+				var t = MultipleInputBox(arr[i],cfg);	
+			}else if(arr[i].id=='mib14'){
+				var cfg = {}
+				cfg.customInputBox = document.querySelector('.mib14-select');
+				var t = MultipleInputBox(arr[i],cfg);	
+			}else if(arr[i].id=='mib15'){
+				var cfg = {}
+				cfg.customInputBox = function(mib){
+					var input = document.createElement('input');
+					// input.value=mib.length;
+					input.style.fontSize=(10+mib.length*5)+'px'
+					input.style.width='5em'
+					return input;
+				};
+				var t = MultipleInputBox(arr[i],cfg);	
+			}else{
+				var t = MultipleInputBox(arr[i]);		
+			}
+			
+			
 			window[arr[i]]=t;
 			
 			t.addEventListener('input',function(evt){
@@ -89,6 +112,7 @@
 				<li>.addInputBox([str]) inputbox 추가하기 (처리 이벤트가 추가됨)</li>
 				<li>.addRawTextBox([str]) inputbox 추가하기</li>
 				<li>.getInputBoxes(); inputbox 의 입력 부분에 대한 Nodelists</li>
+				<li>.setCustomInputBox(html_node|String|Function); data-inputBoxType=custom 일 경우 사용할 inputBox형태(.multipleInputBox-input 부분만 교체됨)</li>
 			</ul>
 			
 			
@@ -99,7 +123,7 @@
 			</ul>
 			<h2>attribute</h2>
 			<ul>
-				<li>data-inputBoxType="type" //div(기본),text,number,custom 등 추가되는 inputBox 의 타입 설정. custom 설정시 .set</li>
+				<li>data-inputBoxType="type" //div(기본),text,number,custom 등 추가되는 inputBox 의 타입 설정. custom 설정시 .setCustomInputBox()의 설정이 적용됨</li>
 				<li>data-removeEmptyBox //빈 inputbox 자동 삭제</li>
 				<li>data-separator="," //문자열 구분자(기본:,)</li>
 				<li>data-useJSON //데이터 serialize 처리시 json 방식을 사용한다.</li>
@@ -165,7 +189,23 @@
 		<hr />
 		<h2> data-min="3" data-max="5" //inputbox 의 최수/최대 갯수</h2>
 		<input type="text" oninput="mib12.value = this.value;" value="" id="mib12-input"  />
-		<div class="multipleInputBox" data-min="3" data-max="5" id="mib12"><input type="hidden" readOnly value="동해물과,백두산이,마르고,닳도록,하느님이,보우하사,우리나라,만세,무궁화" /></div>		
+		<div class="multipleInputBox" data-min="3" data-max="5" id="mib12"><input type="hidden" readOnly value="동해물과,백두산이,마르고,닳도록,하느님이,보우하사,우리나라,만세,무궁화" /></div>
+		<h2> data-inputBoxType="custom"<br /> cfg{customInputBox:'&lt;input type="text" placeholder="input here" style="background-color:#abc" /&gt;'}</h2>
+		<input type="text" oninput="mib13.value = this.value;" value="" id="mib13-input"  />
+		<div class="multipleInputBox" data-inputBoxType="custom" id="mib13"><input type="hidden" readOnly value="TEST,,,a,b,c" /></div>
+		<h2> data-inputBoxType="custom"<br /> cfg{customInputBox:document.querySelector('.mib14-select')}</h2>
+		<select class="mib14-select">
+			<option value="">none</option>
+			<option value="A">A</option>
+			<option value="B">B</option>
+			<option value="C">C</option>
+		</select>		
+		<input type="text" oninput="mib14.value = this.value;" value="" id="mib14-input"  />
+		<div class="multipleInputBox" data-inputBoxType="custom" id="mib14"><input type="hidden" readOnly value="A,B,,C" /></div>
+		<h2> data-inputBoxType="custom"<br /> cfg{customInputBox:function(mib){~~~}}</h2>
+		<input type="text" oninput="mib15.value = this.value;" value="" id="mib15-input"  />
+		<div class="multipleInputBox" data-inputBoxType="custom" id="mib15"><input type="hidden" readOnly value="TEST,,,a,b,c" /></div>
+		
 	</div>
 </body>
 </html>

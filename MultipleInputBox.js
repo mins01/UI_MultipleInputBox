@@ -16,25 +16,23 @@ var MultipleInputBox = (function(){
 	* @param  {Object} opt config
 	* @return {html_node} mib
 	*/
-	var init = function(mib){		
-		// mib.innerHTML = '<div class="multipleInputBox-boxes"></div><button class="multipleInputBox-btn multipleInputBox-btn-add"></button>'
-		// var input = mib.querySelector("input,textarea");
-		// mib.input = input?input:null;;
+	var init = function(mib,cfg){
+		/**
+		* 기본 모양 만드는 부분
+		*/
+		
 		mib.boxes = document.createElement('div');
 		mib.boxes.className="multipleInputBox-boxes";
 		mib.btnAdd = document.createElement('button');
 		mib.btnAdd.className="multipleInputBox-btn multipleInputBox-btn-add";
 		mib.appendChild(mib.boxes)
 		mib.appendChild(mib.btnAdd)
+		/**
+		* init_method 메소드 설정
+		* @param  {html_node} mib
+		* @param  {Object} opt config
+		*/
 		
-
-
-	/**
-	* init_method 메소드 설정
-	* @param  {html_node} mib
-	* @param  {Object} opt config
-	*/
-
 		/**
 		* removeAllTexts text 들 전부 삭제
 		*/
@@ -42,6 +40,13 @@ var MultipleInputBox = (function(){
 			mib.boxes.innerHTML = "";
 			
 		}
+		/**
+		* setCfg 설정값 변경
+		* @return {Array}
+		*/
+		mib.setCfg = function(icfg){
+			cfg = Object.assign(cfg,icfg);
+		} 
 		/**
 		* toArray 배열로 내용 가져오기
 		* @return {Array}
@@ -60,10 +65,14 @@ var MultipleInputBox = (function(){
 		mib.getInputBoxes = function(){
 			return mib.querySelectorAll(".multipleInputBox-input");
 		}
+		mib.setCustomInputBox = function(customInputBox){
+			cfg.customInputBox = customInputBox;
+		}
+
 		/**
-		 * getText 문자열로 내용 가져오기 (.value 와 같음)
-		 * @return {String} 
-		 */
+		* getText 문자열로 내용 가져오기 (.value 와 같음)
+		* @return {String} 
+		*/
 		var getText = function(){
 			if(mib.hasAttribute('data-useJSON')){
 				return JSON.stringify(mib.toArray());
@@ -73,16 +82,16 @@ var MultipleInputBox = (function(){
 			
 		}
 		/**
-		 * setText Text값 설정하기(구분자로 자동 처리함)(.value=~~~ 와 같음)
-		 * @param  {String} txt 
-		 */
+		* setText Text값 설정하기(구분자로 자동 처리함)(.value=~~~ 와 같음)
+		* @param  {String} txt 
+		*/
 		var setText = function(txt){
 			removeAllTexts();
 			if(txt==""){return;}
 			
 			var max = mib.hasAttribute('data-max')?parseInt(mib.getAttribute('data-max')):-1
 			var min = mib.hasAttribute('data-min')?parseInt(mib.getAttribute('data-min')):-1
-
+			
 			try{
 				if(mib.hasAttribute('data-useJSON')){
 					var arr = JSON.parse(txt)
@@ -105,12 +114,13 @@ var MultipleInputBox = (function(){
 			}
 		}
 		/**
-		 * sync 데이터 싱크(속의 input에게 값을 다시 넣음)
-		 */
+		* sync 데이터 싱크(속의 input에게 값을 다시 넣음)
+		*/
 		var sync = function(toMib){
 			var input = mib.querySelector("input,textarea");
 			if(input){
 				if(toMib){
+					console.log(input.value);
 					mib.value = input.value;
 				}else{
 					input.value = mib.value;
@@ -118,54 +128,77 @@ var MultipleInputBox = (function(){
 			}
 		}
 		/**
-		 * addInputBoxes 배열을 기준으로 여러 textbox 를 추가하기
-		 * @param  {Array} arr
-		 */
+		* addInputBoxes 배열을 기준으로 여러 textbox 를 추가하기
+		* @param  {Array} arr
+		*/
 		mib.addInputBoxes = function(arr){
 			var boxes = []
 			var removeEmptyBox = mib.hasAttribute('data-removeEmptyBox');
 			for(var i=0,m=arr.length;i<m;i++){
 				if(removeEmptyBox && arr[i].length==0){continue;}
-				boxes.push(this.addRawTextBox(arr[i]))
+				boxes.push(this.addRawInputBox(arr[i]))
 			}
 			sync(false);
 			// mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 			return boxes;
 		}
 		/**
-		 * addInputBox textbox 추가하기 (처리 이벤트가 추가됨)
-		 * @param  {String} str   옵션
-		 * @return {html_node}
-		 */
+		* addInputBox textbox 추가하기 (처리 이벤트가 추가됨)
+		* @param  {String} str   옵션
+		* @return {html_node}
+		*/
 		mib.addInputBox = function(str){
-			var box = this.addRawTextBox(str);
+			var box = this.addRawInputBox(str);
 			mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 			return box;
 		}
 		/**
-		 * addRawTextBox textbox 추가하기
-		 * @param  {String} str   옵션
-		 * @return {html_node}
-		 */
-		mib.addRawTextBox = function(str){
+		* addRawInputBox textbox 추가하기
+		* @param  {String} str   옵션
+		* @return {html_node}
+		*/
+		mib.addRawInputBox = function(str){
 			if(str==undefined||str==null) str='';
 			var box = document.createElement('div');
 			box.className ="multipleInputBox-box";
 			var textType = mib.getAttribute('data-inputBoxType')
 			if(!textType) textType = 'div';
 			switch(textType){
+				case "custom":
+				var inputBoxType =  cfg.customInputBox;	
+				break;
 				case "div":
-				var t =  '<div class="multipleInputBox-input" contenteditable="true"></div>';	
+				var inputBoxType =  '<div contenteditable="true"></div>';	
 				break;
 				default:
-				var t =  '<input type="'+textType+'" class="multipleInputBox-input"></div>';	
+				var inputBoxType =  '<input type="'+textType+'">';	
 				break;
-				
 			}
-			t+='<div class="multipleInputBox-btns">'+
-			'<button class="multipleInputBox-btn multipleInputBox-btn-remove"></button>'+
-			'</div>';
-			box.innerHTML = t;
+			var input = null;
+			switch(typeof(inputBoxType)){
+				case "string":
+				var t1 = document.createElement('div')
+				t1.innerHTML=inputBoxType;
+				input = t1.firstChild;
+				break;
+				case "function":
+				input = cfg.customInputBox(mib);
+				break;
+				case "object":
+				if(cfg.customInputBox instanceof HTMLElement){
+					input = cfg.customInputBox.cloneNode(true);
+				}
+				break;
+			}
+			if(input == null){
+				throw "Failed to create for inputBox";
+			}
+			input.className+=" multipleInputBox-input";
+			var btns = document.createElement('div');
+			btns.className="multipleInputBox-btns";
+			btns.innerHTML = '<button class="multipleInputBox-btn multipleInputBox-btn-remove"></button>';
+			box.appendChild(input);
+			box.appendChild(btns);
 			box.btnRemove = box.querySelector(".multipleInputBox-btn-remove");
 			box.text = box.querySelector(".multipleInputBox-input");
 			
@@ -216,13 +249,13 @@ var MultipleInputBox = (function(){
 			configurable: false //삭제 가능여부. writable 속성 변경 가능 여부
 		});
 		
-
-	/**
-	 * 이벤트 초기화
-	 * @param  {html_node} mib
-	 * @param  {Object} opt config
-	 */
-
+		
+		/**
+		* 이벤트 초기화
+		* @param  {html_node} mib
+		* @param  {Object} opt config
+		*/
+		
 		mib.btnAdd.addEventListener('click',function(evt){
 			var box = mib.addInputBox();
 			box.text.focus();
@@ -237,13 +270,14 @@ var MultipleInputBox = (function(){
 	}
 	
 	/**
-	 * 동작 함수
-	 * @param  {html_node} mib
-	 * @param  {Object} opt config
-	 * @return {html_node} mib
-	 */
-	return function(mib){
-		init(mib);
+	* 동작 함수
+	* @param  {html_node} mib
+	* @param  {Object} opt config
+	* @return {html_node} mib
+	*/
+	return function(mib,i_cfg){
+		var cfg = Object.assign({"customInputBox":null},i_cfg);
+		init(mib,cfg);
 	
 		return mib;
 	}
