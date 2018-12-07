@@ -129,6 +129,8 @@
 				<li>data-useJSON //데이터 serialize 처리시 json 방식을 사용한다.</li>
 				<li>data-min //inputbox의 최소수 (data-removeEmptyBox 적용 시 동작 안한다!)</li>
 				<li>data-max //inputbox의 최대수</li>
+				<li>data-autoAddInputBox //x탭 or 엔터할 때 자동으로 inputbox를 새로 추가</li>
+
 			</ul>	
 			<h2>customEvent</h2>
 			<ul>
@@ -204,7 +206,18 @@
 		<div class="multipleInputBox" data-inputBoxType="custom" id="mib14"><input type="hidden" readOnly value="A,B,,C" /></div>
 		<h2> data-inputBoxType="custom"<br /> cfg{customInputBox:function(mib){~~~}}</h2>
 		<input type="text" oninput="mib15.value = this.value;" value="" id="mib15-input"  />
-		<div class="multipleInputBox" data-inputBoxType="custom" id="mib15"><input type="hidden" readOnly value="TEST,,,a,b,c" /></div>
+		<div class="multipleInputBox" data-inputBoxType="custom" id="mib15"><input type="hidden" readOnly value="TEST,,,a,b,c,,,a,b,c" /></div>
+		
+		<h2> data-autoAddInputBox //탭과 엔터로 inputbox 자동 추가</h2>
+		<input type="text" oninput="mib16.value = this.value;" value="" id="mib16-input"  />
+		<div class="multipleInputBox" data-autoAddInputBox id="mib16"><input type="hidden" readOnly value="TEST,TAB,ENTER" /></div>
+		<h2> data-autoRemoveInputBox //backspace와 delete 시 값이 없으면 inputbox 삭제</h2>
+		<input type="text" oninput="mib17.value = this.value;" value="" id="mib17-input"  />
+		<div class="multipleInputBox" data-autoRemoveInputBox id="mib17"><input type="hidden" readOnly value="TEST,BACKSPACE,DELETE" /></div>
+		
+		<h2> data-autoAddInputBox & data-autoRemoveInputBox </h2>
+		<input type="text" oninput="mib18.value = this.value;" value="" id="mib18-input"  />
+		<div class="multipleInputBox" data-autoAddInputBox data-autoRemoveInputBox id="mib18"><input type="hidden" readOnly value="TEST,TAB,ENTER,TEST,BACKSPACE,DELETE" /></div>
 		
 	</div>
 </body>

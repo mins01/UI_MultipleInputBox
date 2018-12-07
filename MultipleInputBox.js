@@ -201,6 +201,7 @@ var MultipleInputBox = (function(){
 			box.appendChild(btns);
 			box.btnRemove = box.querySelector(".multipleInputBox-btn-remove");
 			box.text = box.querySelector(".multipleInputBox-input");
+			box.text.box = box;
 			
 			if(textType=='div'){
 				Object.defineProperty(box.text, 'value', {
@@ -227,6 +228,45 @@ var MultipleInputBox = (function(){
 					mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
 				}
 			});
+			box.text.addEventListener('keydown',function(evt){
+				if(mib.hasAttribute('data-autoAddInputBox') && (evt.which==9 || evt.which==13 )){ //TAB , ENTER
+					mib.addInputBox().text.focus();
+					evt.stopPropagation();
+					evt.preventDefault();
+					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+					return false;
+				}else if(mib.hasAttribute('data-autoRemoveInputBox') && (evt.which==8 || evt.which==46 )){
+					if(this.value.length==0){
+						if(evt.which==8){ //BACKSPACE
+							if(this.box.previousElementSibling){
+								this.box.previousElementSibling.text.focus();
+							}else if(this.box.nextElementSibling){
+								this.box.nextElementSibling.text.focus();
+							}
+						}
+						if(evt.which==46){ //DELETE
+							if(this.box.nextElementSibling){
+								this.box.nextElementSibling.text.focus();
+							}else if(this.box.previousElementSibling){
+								this.box.previousElementSibling.text.focus();
+							}
+						}
+						this.box.parentNode.removeChild(this.box);			
+						evt.stopPropagation();
+						evt.preventDefault();
+						mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+						return false;
+					}
+					
+				}else if(evt.which==13 ){
+					evt.stopPropagation();
+					evt.preventDefault();
+					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+					return false;
+				}
+				
+			});
+			
 			mib.boxes.appendChild(box);
 			mib.dispatchEvent((new CustomEvent('addinputbox',{bubbles: false, cancelable: false, detail: {}})));			
 			return box;
