@@ -38,7 +38,7 @@
 	position: relative;
 	background-color: transparent;
 }
-.multipleInputBox-text{
+.multipleInputBox-input{
 	width: 100%;
 	min-width: 3em;
 	outline-width: 0;
@@ -54,11 +54,11 @@
 	border-width: 0;
 	border-bottom: 1px dashed #999;
 }
-.multipleInputBox-text *{
+.multipleInputBox-input *{
 	display: inline-block;
 	text-decoration: none;font-weight: normal;font-style: normal;	
 }
-.multipleInputBox-text:focus + .multipleInputBox-btns{
+.multipleInputBox-input:focus + .multipleInputBox-btns{
 	opacity: 0.2;
 	pointer-events: none;
 }

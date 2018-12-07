@@ -51,6 +51,9 @@
 			t.addEventListener('change',function(evt){
 				console.log(evt.type)
 			})
+			t.addEventListener('addinputbox',function(evt){
+				console.log(evt.type)
+			})
 			document.querySelector("#"+arr[i].id+"-input").value = t.value;	
 		}
 		
@@ -74,28 +77,42 @@
 			</li>
 		</ul>
 		<hr />
-		<h2>method</h2>
-		<ul>
-			<li>.removeAllTexts text 들 전부 삭제</li>
-			<li>.getTexts 배열로 내용 가져오기</li>
-			<li>.getText 문자열로 내용 가져오기 (.value 와 같음)</li>
-			<li>.setText Text값 설정하기(구분자로 자동 처리함)(.value=~~~ 와 같음)</li>
-			<li>.sync 데이터 싱크(속의 input에게 값을 다시 넣음)</li>
-			<li>.addInputBoxes 배열을 기준으로 여러 textbox 를 추가하기</li>
-			<li>.addInputBox textbox 추가하기 (처리 이벤트가 추가됨)</li>
-			<li>.addRawTextBox textbox 추가하기</li>	
-		</ul>
-		
-		
-		<h2>property</h2>
-		<ul>
-			<li>.value INPUT.value 와 같은 동작을 한다.(내부적으로 .setText,.getText)</li>
-		</ul>
-		
-		<h2>customEvent</h2>
-		<ul>
-			<li>addtextbox textbox 가 추가 될 때마다</li>
-		</ul>
+		<code>
+			<h2>method</h2>
+			<ul>
+				<!-- <li>.removeAllTexts text 들 전부 삭제</li> -->
+				<li>.toArray(); 배열로 내용 가져오기</li>
+				<!-- <li>.getText 문자열로 내용 가져오기 (.value 와 같음)</li> -->
+				<!-- <li>.setText Text값 설정하기(구분자로 자동 처리함)(.value=~~~ 와 같음)</li> -->
+				<li>.sync(toMib) 데이터 싱크(false:속의 input에게 값을 다시 넣음,true:input에서 값을 가져와서 적용함)</li>
+				<li>.addInputBoxes(Array) 배열을 기준으로 여러 inputbox 를 추가하기</li>
+				<li>.addInputBox([str]) inputbox 추가하기 (처리 이벤트가 추가됨)</li>
+				<li>.addRawTextBox([str]) inputbox 추가하기</li>
+				<li>.getInputBoxes(); inputbox 의 입력 부분에 대한 Nodelists</li>
+			</ul>
+			
+			
+			<h2>property</h2>
+			<ul>
+				<li>.value INPUT.value 와 같은 동작을 한다.(내부적으로 .setText,.getText)</li>
+			</ul>
+			<h2>attribute</h2>
+			<ul>
+				<li>data-textType=type //div(기본),text,number 등 추가되는 inputBox 의 타입 설정</li>
+				<li>data-removeEmptyBox //빈 inputbox 자동 삭제</li>
+				<li>data-separator //문자열 구분자(기본:,)</li>
+				<li>data-useJSON //데이터 serialize 처리시 json 방식을 사용한다.</li>
+				<li>data-useJSON //데이터 serialize 처리시 json 방식을 사용한다.</li>
+			</ul>	
+			<h2>customEvent</h2>
+			<ul>
+				<li>addinputbox inputbox 가 추가 될 때마다</li>
+			</ul>
+			<h2>CSS</h2>
+			<ul>
+				<li>.multipleInputBox-inline // inline-block 으로 보여짐</li>
+			</ul>	
+		</code>
 		<hr />
 		<h2>.addInputBox()</h2>
 		<input type="text" oninput="mib01.value = this.value;" value="" id="mib01-input"  />
@@ -121,7 +138,7 @@
 		<input type="text" oninput="mib05.value = this.value;" value="" id="mib05-input"  />
 		<div class="multipleInputBox" data-textType="range" id="mib05"><input type="hidden" readOnly value="10,20,30,40" /></div>
 		<hr />
-		<h2>@data-removeEmptyBox //빈 textbox 자동 삭제</h2>
+		<h2>@data-removeEmptyBox //빈 inputbox 자동 삭제</h2>
 		<input type="text" oninput="mib06.value = this.value;" value="" id="mib06-input"  />
 		<div class="multipleInputBox" data-removeEmptyBox id="mib06"><input type="hidden" readOnly value="빈칸은,삭제,,,됩니다." /></div>
 		<hr />
