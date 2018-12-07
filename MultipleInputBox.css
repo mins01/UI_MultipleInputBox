@@ -6,7 +6,7 @@
 	display: inline-block;
 }
 .multipleInputBox-boxes{
-	display: inline-block;
+	display: inline;
 	align-items: center; /* 세로 중앙 */
 }
 .multipleInputBox-boxes:empty::before{
@@ -57,6 +57,9 @@
 .multipleInputBox-input *{
 	display: inline-block;
 	text-decoration: none;font-weight: normal;font-style: normal;	
+}
+.multipleInputBox-btns{
+	display: inline-block;
 }
 .multipleInputBox-input:focus + .multipleInputBox-btns{
 	opacity: 0.2;
