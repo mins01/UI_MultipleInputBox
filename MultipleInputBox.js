@@ -151,7 +151,7 @@ var MultipleInputBox = (function(){
 			if(str==undefined||str==null) str='';
 			var box = document.createElement('div');
 			box.className ="multipleInputBox-box";
-			var textType = mib.getAttribute('data-textType')
+			var textType = mib.getAttribute('data-inputBoxType')
 			if(!textType) textType = 'div';
 			switch(textType){
 				case "div":
