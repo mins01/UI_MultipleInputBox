@@ -131,6 +131,7 @@
 				<li>data-max //inputbox의 최대수</li>
 				<li>data-autoAddInputBox //tab or enter시 자동으로 inputbox를 새로 추가</li>
 				<li>data-autoRemoveInputBox //delete, backspace 시 자동 삭제</li>
+				<li>data-list //input 태그의 list의 값으로 설정</li>
 
 			</ul>	
 			<h2>customEvent</h2>
@@ -157,13 +158,20 @@
 		<button onclick="mib01.addInputBox('test')">.addInputBox('test')</button>
 		<button onclick="mib01.addInputBox()">.addInputBox()</button>
 		<hr />
-		<h2>@data-inputBoxType="div" //자동으로 너비가 늘어남</h2>
+		<datalist id="browsers">
+	    <option value="Internet Explorer">
+	    <option value="Firefox">
+	    <option value="Chrome">
+	    <option value="Opera">
+	    <option value="Safari">
+	  </datalist>
+		<h2>@data-inputBoxType="div" //자동으로 너비가 늘어남 // 더이상 지원 안됨. text로 대체. 다른 것도 자동으로 너비가 늘어남!</h2>
 		<input type="text" oninput="mib02.value = this.value;" value="" id="mib02-input"  />
-		<div class="multipleInputBox" data-inputBoxType="div" id="mib02"><textarea readOnly style="display:none">하늘이, 뭐라하더냐, 난들아냐</textarea></div>
+		<div class="multipleInputBox" data-inputBoxType="div" id="mib02" data-list="browsers"><textarea readOnly style="display:none">하늘이, 뭐라하더냐, 난들아냐</textarea></div>
 		<hr />
 		<h2>@data-inputBoxType="text"</h2>
 		<input type="text" oninput="mib03.value = this.value;" value="" id="mib03-input"  />
-		<div class="multipleInputBox" data-inputBoxType="text" id="mib03"><textarea readOnly style="display:none">하늘이, 뭐라하더냐, 난들아냐</textarea></div>
+		<div class="multipleInputBox" data-inputBoxType="text" id="mib03"  data-list="browsers"><textarea readOnly style="display:none">하늘이, 뭐라하더냐, 난들아냐</textarea></div>
 		<hr />
 		<h2>@data-inputBoxType="number"</h2>
 		<input type="text" oninput="mib04.value = this.value;" value="" id="mib04-input"  />

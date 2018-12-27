@@ -120,13 +120,24 @@ var MultipleInputBox = (function(){
 			var input = mib.querySelector("input,textarea");
 			if(input){
 				if(toMib){
-					console.log(input.value);
+					// console.log(input.value);
 					mib.value = input.value;
 				}else{
 					input.value = mib.value;
 				}
 			}
 		}
+		
+		
+		var measureText = function(text,el){
+			measureText.div.style.font = getComputedStyle(el).font
+			measureText.div.innerText = text;
+			return measureText.div.getBoundingClientRect()['width'];
+		}
+		measureText.div = document.createElement("div");
+		measureText.div.className ='multipleInputBox-measureText';
+		mib.appendChild(measureText.div);
+		
 		/**
 		* addInputBoxes 배열을 기준으로 여러 textbox 를 추가하기
 		* @param  {Array} arr
@@ -162,7 +173,8 @@ var MultipleInputBox = (function(){
 			var box = document.createElement('div');
 			box.className ="multipleInputBox-box";
 			var textType = mib.getAttribute('data-inputBoxType')
-			if(!textType) textType = 'div';
+			if(!textType) textType = 'text';
+			if(textType=='div') textType = 'text';
 			switch(textType){
 				case "custom":
 				var inputBoxType =  cfg.customInputBox;	
@@ -214,6 +226,10 @@ var MultipleInputBox = (function(){
 				});	
 			}
 			box.text.value=str
+			if(this.hasAttribute('data-list')){
+				box.text.setAttribute('list',this.getAttribute('data-list'))	
+			}
+			
 			
 			
 			box.btnRemove.addEventListener('click',function(evt){
@@ -227,6 +243,13 @@ var MultipleInputBox = (function(){
 					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 					mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
 				}
+			});
+			box.text.resizeByText = function(){
+				var w = measureText(this.value,this);
+				this.style.width='calc('+w+'px + 1.5em)';
+			}
+			box.text.addEventListener('input',function(evt){
+				this.resizeByText();
 			});
 			box.text.addEventListener('keydown',function(evt){
 				if(mib.hasAttribute('data-autoAddInputBox') && (evt.which==9 || evt.which==13 )){ //TAB , ENTER
@@ -291,6 +314,7 @@ var MultipleInputBox = (function(){
 			});
 			
 			mib.boxes.appendChild(box);
+			box.text.resizeByText();
 			mib.dispatchEvent((new CustomEvent('addinputbox',{bubbles: false, cancelable: false, detail: {}})));			
 			return box;
 		}
