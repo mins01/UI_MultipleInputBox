@@ -117,7 +117,7 @@ var MultipleInputBox = (function(){
 		* sync 데이터 싱크(속의 input에게 값을 다시 넣음)
 		*/
 		var sync = function(toMib){
-			var input = mib.querySelector("input,textarea");
+			var input = mib.querySelector(".multipleInputBox-sync");
 			if(input){
 				if(toMib){
 					// console.log(input.value);
@@ -349,7 +349,7 @@ var MultipleInputBox = (function(){
 		})
 		mib.addEventListener('input',function(evt){
 			sync(false);
-			var input = mib.querySelector("input,textarea");
+			var input = mib.querySelector(".multipleInputBox-sync");
 			if(input) input.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 		})
 		
