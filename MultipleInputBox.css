@@ -1,13 +1,15 @@
 @charset "UTF-8";
 .multipleInputBox{
 	box-sizing: border-box;
+	vertical-align: text-bottom;
 }
 .multipleInputBox-inline{
 	display: inline-block;
+	vertical-align: text-bottom;
 }
 .multipleInputBox-boxes{
-	display: inline;
-	align-items: center; /* 세로 중앙 */
+	display: inline-block;
+	vertical-align: text-bottom;
 }
 .multipleInputBox-boxes:empty::before{
 	content: "empty";
@@ -15,29 +17,42 @@
 	margin:0 0.2em;
 }
 .multipleInputBox-box{
-	/* display: inline-flex; */
 	display: inline-block;
-	align-items: center; /* 세로 중앙 */
 	min-width:2em;
-	/* width:10em; */
 	position: relative;
 	box-sizing: border-box;
 	vertical-align: middle;
 	margin:0 0.2em;
-
-
+	white-space: nowrap;
 }
-
 .multipleInputBox-btn{
 	font-size: inherit;
-	flex: 0 0 auto;
 	padding:0;margin:0;
-	width:1em;height: 1em;line-height: 1em;
+	width:1em;
+	line-height: inherit;
 	align-items: center;
 	border-width:0;
 	border-radius: 0.5em;
 	position: relative;
 	background-color: transparent;
+	vertical-align: middle;
+	vertical-align: text-bottom;
+}
+.multipleInputBox-inputs{
+	display: inline-block;
+	font-size: 1em;
+	padding:0;margin:0;
+	line-height: inherit;
+	align-items: center;
+	overflow: visible;
+	box-sizing: border-box;
+	border-width: 0;
+}
+.multipleInputBox-inputs[data-prefix]::before{
+	content: attr(data-prefix);
+}
+.multipleInputBox-inputs[data-suffix]::after{
+	content: attr(data-suffix);
 }
 .multipleInputBox-input{
 	width: 100%;
@@ -46,7 +61,7 @@
 	font-size: 1em;
 	flex: 1 1 100%;
 	padding:0;margin:0;
-	height: 1em;line-height: 1em;
+	line-height: inherit;
 	align-items: center;
 	overflow: visible;
 	text-decoration: none;
@@ -57,10 +72,13 @@
 }
 .multipleInputBox-input *{
 	display: inline-block;
-	text-decoration: none;font-weight: normal;font-style: normal;	
+	text-decoration: none;font-weight: normal;font-style: normal;
 }
 .multipleInputBox-btns{
 	display: inline-block;
+}
+.multipleInputBox-input:focus{
+	background-color: rgba(0, 0, 0, 0.1);
 }
 .multipleInputBox-input:focus + .multipleInputBox-btns{
 	opacity: 0.2;
@@ -71,21 +89,23 @@
 	font-size: 0.7em;
 	width: auto; padding:0 0.2em;
 	vertical-align: super;
-	background-color: #CC4C27;
-	color: #fff;
+	/* background-color: #eee; */
+	color: red;
 }
 .multipleInputBox-btn-remove::before{
 	content: "×"
 }
 .multipleInputBox-btn-add{
 	background-color: #54CC27;
-	color: #fff;	
+	color: #fff;
+	width:1em; height:1em; line-height: 1em;
+	vertical-align: text-bottom;
 }
 .multipleInputBox-btn-add::before{
 	content: "＋"
 }
 .multipleInputBox-input{
-	font-size:inherit;	
+	font-size:inherit;
 }
 .multipleInputBox-measureText{
 	font-size:inherit;

@@ -20,10 +20,11 @@ var MultipleInputBox = (function(){
 		/**
 		* 기본 모양 만드는 부분
 		*/
-		
+
 		mib.boxes = document.createElement('div');
 		mib.boxes.className="multipleInputBox-boxes";
 		mib.btnAdd = document.createElement('button');
+		mib.btnAdd.type="button";
 		mib.btnAdd.className="multipleInputBox-btn multipleInputBox-btn-add";
 		mib.appendChild(mib.boxes)
 		mib.appendChild(mib.btnAdd)
@@ -32,13 +33,13 @@ var MultipleInputBox = (function(){
 		* @param  {html_node} mib
 		* @param  {Object} opt config
 		*/
-		
+
 		/**
 		* removeAllTexts text 들 전부 삭제
 		*/
 		var removeAllTexts = function(){
 			mib.boxes.innerHTML = "";
-			
+
 		}
 		/**
 		* setCfg 설정값 변경
@@ -46,7 +47,7 @@ var MultipleInputBox = (function(){
 		*/
 		mib.setCfg = function(icfg){
 			cfg = Object.assign(cfg,icfg);
-		} 
+		}
 		/**
 		* toArray 배열로 내용 가져오기
 		* @return {Array}
@@ -71,7 +72,7 @@ var MultipleInputBox = (function(){
 
 		/**
 		* getText 문자열로 내용 가져오기 (.value 와 같음)
-		* @return {String} 
+		* @return {String}
 		*/
 		var getText = function(){
 			if(mib.hasAttribute('data-useJSON')){
@@ -79,19 +80,19 @@ var MultipleInputBox = (function(){
 			}else{
 				return mib.toArray().join(mib.hasAttribute('data-separator')?mib.getAttribute('data-separator'):',');
 			}
-			
+
 		}
 		/**
 		* setText Text값 설정하기(구분자로 자동 처리함)(.value=~~~ 와 같음)
-		* @param  {String} txt 
+		* @param  {String} txt
 		*/
 		var setText = function(txt){
 			removeAllTexts();
 			if(txt==""){return;}
-			
+
 			var max = mib.hasAttribute('data-max')?parseInt(mib.getAttribute('data-max')):-1
 			var min = mib.hasAttribute('data-min')?parseInt(mib.getAttribute('data-min')):-1
-			
+
 			try{
 				if(mib.hasAttribute('data-useJSON')){
 					var arr = JSON.parse(txt)
@@ -127,8 +128,8 @@ var MultipleInputBox = (function(){
 				}
 			}
 		}
-		
-		
+
+
 		var measureText = function(text,el){
 			measureText.div.style.font = getComputedStyle(el).font
 			measureText.div.innerText = text;
@@ -137,7 +138,7 @@ var MultipleInputBox = (function(){
 		measureText.div = document.createElement("div");
 		measureText.div.className ='multipleInputBox-measureText';
 		mib.appendChild(measureText.div);
-		
+
 		/**
 		* addInputBoxes 배열을 기준으로 여러 textbox 를 추가하기
 		* @param  {Array} arr
@@ -177,13 +178,13 @@ var MultipleInputBox = (function(){
 			if(textType=='div') textType = 'text';
 			switch(textType){
 				case "custom":
-				var inputBoxType =  cfg.customInputBox;	
+				var inputBoxType =  cfg.customInputBox;
 				break;
 				case "div":
-				var inputBoxType =  '<div contenteditable="true"></div>';	
+				var inputBoxType =  '<div contenteditable="true"></div>';
 				break;
 				default:
-				var inputBoxType =  '<input type="'+textType+'">';	
+				var inputBoxType =  '<input type="'+textType+'">';
 				break;
 			}
 			var input = null;
@@ -206,15 +207,19 @@ var MultipleInputBox = (function(){
 				throw "Failed to create for inputBox";
 			}
 			input.className+=" multipleInputBox-input";
+			var inputs = document.createElement('div');
+			inputs.className = "multipleInputBox-inputs"
 			var btns = document.createElement('div');
 			btns.className="multipleInputBox-btns";
-			btns.innerHTML = '<button class="multipleInputBox-btn multipleInputBox-btn-remove"></button>';
-			box.appendChild(input);
+			btns.innerHTML = '<button type="button" class="multipleInputBox-btn multipleInputBox-btn-remove"></button>';
+			inputs.appendChild(input);
+			box.appendChild(inputs);
 			box.appendChild(btns);
 			box.btnRemove = box.querySelector(".multipleInputBox-btn-remove");
 			box.text = box.querySelector(".multipleInputBox-input");
 			box.text.box = box;
-			
+			box.text.inputs = inputs;
+
 			if(textType=='div'){
 				Object.defineProperty(box.text, 'value', {
 					get:function(){ return box.text.innerText.replace(/\n/g,'');; },
@@ -223,15 +228,21 @@ var MultipleInputBox = (function(){
 					//writable: true, //값 수정 가능여부 (get,set 과 같이 사용불가)
 					enumerable: true, //목록 열거시 표시여부
 					configurable: false //삭제 가능여부. writable 속성 변경 가능 여부
-				});	
+				});
 			}
 			box.text.value=str
 			if(this.hasAttribute('data-list')){
-				box.text.setAttribute('list',this.getAttribute('data-list'))	
+				box.text.setAttribute('list',this.getAttribute('data-list'))
 			}
-			
-			
-			
+			if(this.hasAttribute('data-prefix')){
+				inputs.setAttribute('data-prefix',this.getAttribute('data-prefix'))
+			}
+			if(this.hasAttribute('data-suffix')){
+				inputs.setAttribute('data-suffix',this.getAttribute('data-suffix'))
+			}
+
+
+
 			box.btnRemove.addEventListener('click',function(evt){
 				box.parentNode.removeChild(box);
 				mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
@@ -262,7 +273,7 @@ var MultipleInputBox = (function(){
 						this.box.previousElementSibling.text.focus()
 					}else{
 						mib.addInputBox().text.focus();
-					}					
+					}
 					evt.stopPropagation();
 					evt.preventDefault();
 					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
@@ -283,13 +294,13 @@ var MultipleInputBox = (function(){
 								this.box.previousElementSibling.text.focus();
 							}
 						}
-						this.box.parentNode.removeChild(this.box);			
+						this.box.parentNode.removeChild(this.box);
 						evt.stopPropagation();
 						evt.preventDefault();
 						mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 						return false;
 					}
-					
+
 				}else if(evt.which==13 ){
 					evt.stopPropagation();
 					evt.preventDefault();
@@ -310,15 +321,15 @@ var MultipleInputBox = (function(){
 						return false;
 					}
 				}
-				
+
 			});
-			
+
 			mib.boxes.appendChild(box);
 			box.text.resizeByText();
-			mib.dispatchEvent((new CustomEvent('addinputbox',{bubbles: false, cancelable: false, detail: {}})));			
+			mib.dispatchEvent((new CustomEvent('addinputbox',{bubbles: false, cancelable: false, detail: {}})));
 			return box;
 		}
-		
+
 		Object.defineProperty(mib, 'value', {
 			get:function(){ return getText(); },
 			set:function(txt){ return setText(txt); },
@@ -335,14 +346,14 @@ var MultipleInputBox = (function(){
 			enumerable: true, //목록 열거시 표시여부
 			configurable: false //삭제 가능여부. writable 속성 변경 가능 여부
 		});
-		
-		
+
+
 		/**
 		* 이벤트 초기화
 		* @param  {html_node} mib
 		* @param  {Object} opt config
 		*/
-		
+
 		mib.btnAdd.addEventListener('click',function(evt){
 			var box = mib.addInputBox();
 			box.text.focus();
@@ -352,10 +363,10 @@ var MultipleInputBox = (function(){
 			var input = mib.querySelector(".multipleInputBox-sync");
 			if(input) input.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 		})
-		
+
 		sync(true); //초기화
 	}
-	
+
 	/**
 	* 동작 함수
 	* @param  {html_node} mib
@@ -365,7 +376,7 @@ var MultipleInputBox = (function(){
 	return function(mib,i_cfg){
 		var cfg = Object.assign({"customInputBox":null},i_cfg);
 		init(mib,cfg);
-	
+
 		return mib;
 	}
 })();
@@ -375,15 +386,15 @@ var MultipleInputBox = (function(){
 
 (function () {
 	if ( typeof window.CustomEvent === "function" ) return false; //If not IE
-	
+
 	function CustomEvent ( event, params ) {
 		params = params || { bubbles: false, cancelable: false, detail: undefined };
 		var evt = document.createEvent( 'CustomEvent' );
 		evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
 		return evt;
 	}
-	
+
 	CustomEvent.prototype = window.Event.prototype;
-	
+
 	window.CustomEvent = CustomEvent;
 })();
