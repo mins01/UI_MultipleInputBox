@@ -152,7 +152,7 @@ var MultipleInputBox = (function(){
 			var boxes = []
 			var removeEmptyBox = mib.hasAttribute('data-removeEmptyBox');
 			for(var i=0,m=arr.length;i<m;i++){
-				if(removeEmptyBox && arr[i].length==0){continue;}
+				if(removeEmptyBox && (!arr[i] || arr[i].length==0)){continue;}
 				boxes.push(this.addRawInputBox(arr[i]))
 			}
 			sync(false);
