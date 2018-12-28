@@ -97,7 +97,12 @@ var MultipleInputBox = (function(){
 				if(mib.hasAttribute('data-useJSON')){
 					var arr = JSON.parse(txt)
 				}else{
-					var arr = txt.split(mib.hasAttribute('data-separator')?mib.getAttribute('data-separator'):',');
+					if(txt.length==0){
+						var arr = [];
+					}else{
+						var arr = txt.split(mib.hasAttribute('data-separator')?mib.getAttribute('data-separator'):',');
+					}
+					
 				}
 				if(max>0 && arr.length>max){
 					arr = arr.splice(0,max);
