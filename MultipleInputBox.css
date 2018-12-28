@@ -8,7 +8,7 @@
 	vertical-align: text-bottom;
 }
 .multipleInputBox-boxes{
-	display: inline-block;
+	display: inline;
 	vertical-align: text-bottom;
 }
 .multipleInputBox-boxes:empty::before{
