@@ -307,7 +307,8 @@ var MultipleInputBox = (function(){
 					}else if(evt.shiftKey && this.box.previousElementSibling){
 						this.box.previousElementSibling.text.focus()
 					}else{
-						mib.addInputBox().text.focus();
+						var inputBox = mib.addInputBox()
+						if(inputBox) inputBox.text.focus();
 					}
 					evt.stopPropagation();
 					evt.preventDefault();
