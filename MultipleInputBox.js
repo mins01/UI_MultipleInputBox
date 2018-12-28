@@ -283,6 +283,11 @@ var MultipleInputBox = (function(){
 			})
 			box.text.addEventListener('blur',function(evt){
 				if(mib.hasAttribute('data-removeEmptyBox') && this.value==""){
+					var box_cnt = mib.querySelectorAll('.multipleInputBox-box').length;
+					var min = mib.hasAttribute('data-min')?parseInt(mib.getAttribute('data-min')):-1
+					if(min>0 && min>=box_cnt){
+						return;
+					}		
 					box.parentNode.removeChild(box);
 					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 					mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));

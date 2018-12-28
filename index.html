@@ -212,7 +212,7 @@
 		<hr />
 		<h2> data-min="3" data-max="5" //inputbox 의 최수/최대 갯수</h2>
 		<input type="text" oninput="mib12.value = this.value;" value="" id="mib12-input"  />
-		<div class="multipleInputBox" data-min="1" data-max="5" id="mib12"><input type="hidden"  class="multipleInputBox-sync" readOnly value="" /></div>
+		<div class="multipleInputBox" data-removeEmptyBox  data-min="1" data-max="5" id="mib12"><input type="hidden"  class="multipleInputBox-sync" readOnly value="" /></div>
 		<h2> data-inputBoxType="custom"<br /> cfg{customInputBox:'&lt;input type="text" placeholder="input here" style="background-color:#abc" /&gt;'}</h2>
 		<input type="text" oninput="mib13.value = this.value;" value="" id="mib13-input"  />
 		<div class="multipleInputBox" data-inputBoxType="custom" id="mib13"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,,,a,b,c" /></div>
