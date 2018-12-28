@@ -118,6 +118,11 @@ var MultipleInputBox = (function(){
 			}catch(e){
 				console.log(e)
 			}
+			var box_cnt = mib.querySelectorAll(".multipleInputBox-box").length;
+			for(var i=box_cnt,m=min;i<m;i++){
+				mib.addInputBox("")
+			}
+
 		}
 		/**
 		* sync 데이터 싱크(속의 input에게 값을 다시 넣음)
