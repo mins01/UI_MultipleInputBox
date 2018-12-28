@@ -377,6 +377,13 @@ var MultipleInputBox = (function(){
 		* @param  {Object} opt config
 		*/
 
+
+		mib.boxes.addEventListener('click',function(evt){
+			var box_cnt = mib.querySelectorAll(".multipleInputBox-box").length
+			if(box_cnt>0) return;
+			var box = mib.addInputBox();
+			if(box) box.text.focus();
+		})
 		mib.btnAdd.addEventListener('click',function(evt){
 			var box = mib.addInputBox();
 			if(box) box.text.focus();
