@@ -263,32 +263,29 @@ var MultipleInputBox = (function(){
 				inputs.setAttribute('data-suffix',this.getAttribute('data-suffix'))
 			}
 
-
-
-			box.btnRemove.addEventListener('click',function(evt){
+			var removeBox = function(box){
 				var box_cnt = mib.querySelectorAll('.multipleInputBox-box').length;
 				var min = mib.hasAttribute('data-min')?parseInt(mib.getAttribute('data-min')):-1
-				try{
-					if(min>0 && min>=box_cnt){
-						throw "Minimum number exceeded:"+ min+"<="+box_cnt;
-					}			
-				}catch(e){
-					console.log(e)
-					return;
-				}
-				
+				if(min>0 && min>=box_cnt){
+					console.log("Minimum number exceeded:"+ min+"<="+box_cnt);
+					return false;
+				}		
 				box.parentNode.removeChild(box);
+				return true;
+			}
+
+			box.btnRemove.addEventListener('click',function(evt){
+				if(!removeBox(box)){
+					return
+				}
 				mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 				mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
 			})
 			box.text.addEventListener('blur',function(evt){
 				if(mib.hasAttribute('data-removeEmptyBox') && this.value==""){
-					var box_cnt = mib.querySelectorAll('.multipleInputBox-box').length;
-					var min = mib.hasAttribute('data-min')?parseInt(mib.getAttribute('data-min')):-1
-					if(min>0 && min>=box_cnt){
-						return;
-					}		
-					box.parentNode.removeChild(box);
+					if(!removeBox(box)){
+						return
+					}
 					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 					mib.dispatchEvent((new CustomEvent('change',{bubbles: false, cancelable: false, detail: {}})));
 				}
@@ -332,7 +329,9 @@ var MultipleInputBox = (function(){
 								this.box.previousElementSibling.text.focus();
 							}
 						}
-						this.box.parentNode.removeChild(this.box);
+						if(!removeBox(this.box)){
+							return
+						}
 						evt.stopPropagation();
 						evt.preventDefault();
 						mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
