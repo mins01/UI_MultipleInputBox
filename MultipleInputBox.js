@@ -300,15 +300,30 @@ var MultipleInputBox = (function(){
 			box.text.addEventListener('keydown',function(evt){
 				if(mib.hasAttribute('data-autoAddInputBox') && (evt.which==9 || evt.which==13 )){ //TAB , ENTER
 					if(evt.shiftKey && !this.box.previousElementSibling){
-					 return;
-				 }else
-					if(!evt.shiftKey && this.box.nextElementSibling){
-						this.box.nextElementSibling.text.focus()
-					}else if(evt.shiftKey && this.box.previousElementSibling){
-						this.box.previousElementSibling.text.focus()
+						return;
 					}else{
-						var inputBox = mib.addInputBox()
-						if(inputBox) inputBox.text.focus();
+						if(!evt.shiftKey && this.box.nextElementSibling){
+							this.box.nextElementSibling.text.focus()
+						}else if(evt.shiftKey && this.box.previousElementSibling){
+							this.box.previousElementSibling.text.focus()
+						}else if(this.value !=''){
+							var inputBox = mib.addInputBox()
+							if(inputBox){
+								inputBox.text.focus();
+							}else{
+								if(evt.which==13 ){
+									evt.stopPropagation();
+									evt.preventDefault();
+								}
+								return false
+							}
+						}else{
+							if(evt.which==13 ){
+								evt.stopPropagation();
+								evt.preventDefault();
+							}
+							return false
+						}
 					}
 					evt.stopPropagation();
 					evt.preventDefault();
