@@ -162,10 +162,15 @@ var MultipleInputBox = (function(){
 		mib.addInputBox = function(str){
 			var box_cnt = mib.querySelectorAll('.multipleInputBox-box').length;
 			var max = mib.hasAttribute('data-max')?parseInt(mib.getAttribute('data-max')):-1
-			if(max>0 && max<=box_cnt){
-				throw "Maximum number exceeded: "+ max+">="+box_cnt;;
-				return false;
+			try{
+				if(max>0 && max<=box_cnt){
+					throw "Maximum number exceeded: "+ max+">="+box_cnt;;
+				}	
+			}catch(e){
+				console.log(e)
+				return null;
 			}
+			
 			
 			var box = this.addRawInputBox(str);
 			mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
@@ -253,9 +258,13 @@ var MultipleInputBox = (function(){
 			box.btnRemove.addEventListener('click',function(evt){
 				var box_cnt = mib.querySelectorAll('.multipleInputBox-box').length;
 				var min = mib.hasAttribute('data-min')?parseInt(mib.getAttribute('data-min')):-1
-				if(min>0 && min>=box_cnt){
-					throw "Minimum number exceeded:"+ min+"<="+box_cnt;
-					return false;
+				try{
+					if(min>0 && min>=box_cnt){
+						throw "Minimum number exceeded:"+ min+"<="+box_cnt;
+					}			
+				}catch(e){
+					console.log(e)
+					return;
 				}
 				
 				box.parentNode.removeChild(box);
@@ -370,7 +379,7 @@ var MultipleInputBox = (function(){
 
 		mib.btnAdd.addEventListener('click',function(evt){
 			var box = mib.addInputBox();
-			box.text.focus();
+			if(box) box.text.focus();
 		})
 		mib.addEventListener('input',function(evt){
 			sync(false);
