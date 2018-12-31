@@ -134,7 +134,7 @@
 				<li>data-list //input 태그의 list의 값으로 설정</li>
 				<li>data-prefix //접두사 (value에는 영향 안 미침)</li>
 				<li>data-suffix //접미사 (value에는 영향 안 미침)</li>
-
+				<li>data-required //최초의 inputbox에만 required 설정한다. </li>
 			</ul>
 			<h2>customEvent</h2>
 			<ul>
@@ -247,6 +247,14 @@
 		<h2> data-prefix & data-suffix </h2>
 		<input type="text"  oninput="mib19.value = this.value;" value="" id="mib19-input"  />
 		<div class="multipleInputBox" data-prefix="#" data-suffix=":)" data-min="3" data-max="10" data-autoAddInputBox data-autoRemoveInputBox id="mib19"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,TAB,ENTER,TEST,BACKSPACE,DELETE" /></div>
+		
+		<h2> data-required 최초의 inputbox에만 required 설정한다.</h2>
+		<form action="" onsubmit="alert('submit'); return false;">
+			<input type="text"  oninput="mib19.value = this.value;" value="" id="mib20-input"  />
+			<div class="multipleInputBox" data-required id="mib20" data-min="1"><input type="hidden"  class="multipleInputBox-sync" readOnly value="" /></div>
+			<button>확인</button>	
+		</form>
+		
 
 	</div>
 </body>

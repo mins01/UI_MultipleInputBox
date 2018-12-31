@@ -128,6 +128,7 @@ var MultipleInputBox = (function(){
 		* sync 데이터 싱크(속의 input에게 값을 다시 넣음)
 		*/
 		var sync = function(toMib){
+			sync_required();
 			var input = mib.querySelector(".multipleInputBox-sync");
 			if(input){
 				if(toMib){
@@ -136,6 +137,22 @@ var MultipleInputBox = (function(){
 				}else{
 					input.value = mib.value;
 				}
+			}
+		}
+		/**
+		 * sync_required data-required 설정에 대해서 맨 처음 box의 input에 required 설정한다.
+		 * @return {[type]} [description]
+		 */
+		
+		var sync_required = function(){
+			if(mib.hasAttribute('data-required')){
+				var inputs = mib.boxes.querySelectorAll('.multipleInputBox-input');
+				inputs.forEach(function(input,idx,arr){
+					input.required = (idx===0);
+					if(idx===0){
+						console.log(input)
+					}
+				});
 			}
 		}
 
