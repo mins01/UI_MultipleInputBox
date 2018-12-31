@@ -140,12 +140,12 @@ var MultipleInputBox = (function(){
 			}
 		}
 		/**
-		 * sync_required data-required 설정에 대해서 맨 처음 box의 input에 required 설정한다.
+		 * sync_required data-once-required 설정에 대해서 맨 처음 box의 input에 required 설정한다.
 		 * @return {[type]} [description]
 		 */
 		
 		var sync_required = function(){
-			if(mib.hasAttribute('data-required')){
+			if(mib.hasAttribute('data-once-required')){
 				var inputs = mib.boxes.querySelectorAll('.multipleInputBox-input');
 				inputs.forEach(function(input,idx,arr){
 					input.required = (idx===0);
