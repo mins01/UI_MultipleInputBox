@@ -149,9 +149,9 @@ var MultipleInputBox = (function(){
 				var inputs = mib.boxes.querySelectorAll('.multipleInputBox-input');
 				inputs.forEach(function(input,idx,arr){
 					input.required = (idx===0);
-					if(idx===0){
-						console.log(input)
-					}
+					// if(idx===0){
+					// 	console.log(input)
+					// }
 				});
 			}
 		}
