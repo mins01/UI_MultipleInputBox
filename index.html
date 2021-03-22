@@ -7,22 +7,22 @@
 	<meta http-equiv="Content-Style-Type" content="text/css">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+	
 	<!-- jquery 관련 -->
 	<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>   -->
-
-
+	
+	
 	<!-- 부트스트랩 4 : IE8지원안됨! -->
 	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">  -->
 	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>  -->
 	<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script> -->
 	<!-- vue.js -->
 	<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
-
+	
 	<!-- meta og -->
-
+	
 	<meta property="og:title" content="inputRangeBox">
 	<meta property="og:description" content="inputRangeBox">
 	<meta name="og:image" content="http://www.mins01.com/img/logo.gif">
@@ -30,63 +30,63 @@
 	<meta property="og:image:height" content="70" />
 	<meta property="og:site_name" content="inputRangeBox" />
 	<meta property="og:type" content="website">
-
+	
 	<!-- //meta og -->
 	<link rel="stylesheet" href="MultipleInputBox.css">
 	<script src="MultipleInputBox.js"></script>
-
+	
 	<script>
-	window.onload=function(evt){
-
-
-		var arr = document.querySelectorAll(".multipleInputBox");
-		for(var i=0,m=arr.length;i<m;i++){
-
-			if(arr[i].id=='mib13'){
-				var cfg = {}
-				cfg.customInputBox = '<input type="text" placeholder="input here" style="background-color:#abc" />';
-				var t = MultipleInputBox(arr[i],cfg);
-			}else if(arr[i].id=='mib14'){
-				var cfg = {}
-				cfg.customInputBox = document.querySelector('.mib14-select');
-				var t = MultipleInputBox(arr[i],cfg);
-			}else if(arr[i].id=='mib15'){
-				var cfg = {}
-				cfg.customInputBox = function(mib){
-					var input = document.createElement('input');
-					// input.value=mib.length;
-					input.style.fontSize=(10+mib.length*5)+'px'
-					input.style.width='5em'
-					return input;
-				};
-				var t = MultipleInputBox(arr[i],cfg);
-			}else{
-				var t = MultipleInputBox(arr[i]);
+		window.onload=function(evt){
+			
+			
+			var arr = document.querySelectorAll(".multipleInputBox");
+			for(var i=0,m=arr.length;i<m;i++){
+				
+				if(arr[i].id=='mib13'){
+					var cfg = {}
+					cfg.customInputBox = '<input type="text" placeholder="input here" style="background-color:#abc" />';
+					var t = MultipleInputBox(arr[i],cfg);
+				}else if(arr[i].id=='mib14'){
+					var cfg = {}
+					cfg.customInputBox = document.querySelector('.mib14-select');
+					var t = MultipleInputBox(arr[i],cfg);
+				}else if(arr[i].id=='mib15'){
+					var cfg = {}
+					cfg.customInputBox = function(mib){
+						var input = document.createElement('input');
+						// input.value=mib.length;
+						input.style.fontSize=(10+mib.length*5)+'px'
+						input.style.width='5em'
+						return input;
+					};
+					var t = MultipleInputBox(arr[i],cfg);
+				}else{
+					var t = MultipleInputBox(arr[i]);
+				}
+				
+				
+				window[arr[i]]=t;
+				
+				t.addEventListener('input',function(evt){
+					console.log(evt.type)
+					document.querySelector("#"+evt.currentTarget.id+"-input").value = this.value;
+				})
+				t.addEventListener('change',function(evt){
+					console.log(evt.type)
+				})
+				t.addEventListener('addinputbox',function(evt){
+					console.log(evt.type)
+				})
+				document.querySelector("#"+arr[i].id+"-input").value = t.value;
 			}
-
-
-			window[arr[i]]=t;
-
-			t.addEventListener('input',function(evt){
-				console.log(evt.type)
-				document.querySelector("#"+evt.currentTarget.id+"-input").value = this.value;
-			})
-			t.addEventListener('change',function(evt){
-				console.log(evt.type)
-			})
-			t.addEventListener('addinputbox',function(evt){
-				console.log(evt.type)
-			})
-			document.querySelector("#"+arr[i].id+"-input").value = t.value;
+			document.querySelector("#mib01").value="";
+			document.querySelector("#mib01").addInputBox("test1")
+			document.querySelector("#mib01").addInputBox("test2")
+			document.querySelector("#mib01").addInputBox("test3")
+			
 		}
-		document.querySelector("#mib01").value="";
-		document.querySelector("#mib01").addInputBox("test1")
-		document.querySelector("#mib01").addInputBox("test2")
-		document.querySelector("#mib01").addInputBox("test3")
-
-	}
 	</script>
-
+	
 </head>
 <body>
 	<div class="container">
@@ -114,8 +114,8 @@
 				<li>.getInputBoxes(); inputbox 의 입력 부분에 대한 Nodelists</li>
 				<li>.setCustomInputBox(html_node|String|Function); data-inputBoxType=custom 일 경우 사용할 inputBox형태(.multipleInputBox-input 부분만 교체됨)</li>
 			</ul>
-
-
+			
+			
 			<h2>property</h2>
 			<ul>
 				<li>.value INPUT.value 와 같은 동작을 한다.(내부적으로 .setText,.getText)</li>
@@ -151,7 +151,7 @@
 			</ul>
 		</code>
 		<hr />
-
+		
 		<datalist id="browsers">
 			<option value="Internet Explorer"></option>
 			<option value="Firefox"></option>
@@ -159,7 +159,7 @@
 			<option value="Opera"></option>
 			<option value="Safari"></option>
 		</datalist>
-
+		
 		<h2>.addInputBox()</h2>
 		<form action="" >
 			<input type="text" oninput="mib01.value = this.value;" value="" id="mib01-input"  />
@@ -170,7 +170,7 @@
 			<button type="button" onclick="alert(mib01.getInputBoxes());console.log(mib01.getInputBoxes())">.getInputBoxes()</button>
 			<button type="button" onclick="mib01.addInputBox('test')">.addInputBox('test')</button>
 			<button type="button" onclick="mib01.addInputBox()">.addInputBox()</button>
-
+			
 			<button>submit</button>
 		</form>
 		<hr />
@@ -229,26 +229,31 @@
 		<h2> data-inputBoxType="custom"<br /> cfg{customInputBox:function(mib){~~~}}</h2>
 		<input type="text" oninput="mib15.value = this.value;" value="" id="mib15-input"  />
 		<div class="multipleInputBox" data-inputBoxType="custom" id="mib15"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,,,a,b,c,,,a,b,c" /></div>
-
-		<h2> data-autoAddInputBox //탭과 엔터로 inputbox 자동 추가</h2>
-		<input type="text" oninput="mib16.value = this.value;" value="" id="mib16-input"  />
-		<div class="multipleInputBox" data-autoAddInputBox id="mib16"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,TAB,ENTER" /></div>
-		<h2> data-autoRemoveInputBox //backspace와 delete 시 값이 없으면 inputbox 삭제</h2>
-		<input type="text" oninput="mib17.value = this.value;" value="" id="mib17-input"  />
-		<div class="multipleInputBox" data-autoRemoveInputBox id="mib17"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,BACKSPACE,DELETE" /></div>
-
-		<h2> data-autoAddInputBoxOnlyTap //탭으로만 inputbox 자동 추가</h2>
-		<input type="text" oninput="mib16.value = this.value;" value="" id="mib16-input"  />
-		<div class="multipleInputBox" data-autoAddInputBoxOnlyTap id="mib16"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,TAB,ENTER" /></div>
-
+		
+		<h2> data-autoAddInputBox //탭과 엔터로 inputbox 자동 추가(enter로 submit 불가)</h2>
+		<form onsubmit="alert('submit');return false;" action="">
+			<input type="text" oninput="mib16.value = this.value;" value="" id="mib16-input"  />
+			<div class="multipleInputBox" data-autoAddInputBox id="mib16"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,TAB,ENTER" /></div>
+			<h2> data-autoRemoveInputBox //backspace와 delete 시 값이 없으면 inputbox 삭제</h2>
+			<input type="text" oninput="mib17.value = this.value;" value="" id="mib17-input"  />
+			<div class="multipleInputBox" data-autoRemoveInputBox id="mib17"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,BACKSPACE,DELETE" /></div>
+			<button>submit</button>
+		</form>
+		
+		<h2> data-autoAddInputBoxOnlyTap //탭으로만 inputbox 자동 추가(enter로 submit 가능)</h2>
+		<form onsubmit="alert('submit');return false;" action="">
+			<input type="text" oninput="mib162.value = this.value;" value="" id="mib162-input"  />
+			<div class="multipleInputBox" data-autoAddInputBoxOnlyTap id="mib162"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,TAB,ENTER" /></div>
+			<button>submit</button>
+		</form>
 		<h2> data-autoAddInputBox & data-autoRemoveInputBox </h2>
-		<form onsubmit="alert('submit')" action="">
+		<form onsubmit="alert('submit');return false;" action="">
 			<input type="text" oninput="mib18.value = this.value;" value="" id="mib18-input"  />
 			<div class="multipleInputBox" data-min="3" data-max="10" data-autoAddInputBox data-autoRemoveInputBox id="mib18"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,TAB,ENTER,TEST,BACKSPACE,DELETE" /></div>
 			<button>submit</button>
 		</form>
-
-
+		
+		
 		<h2> data-prefix & data-suffix </h2>
 		<input type="text"  oninput="mib19.value = this.value;" value="" id="mib19-input"  />
 		<div class="multipleInputBox" data-prefix="#" data-suffix=":)" data-min="3" data-max="10" data-autoAddInputBox data-autoRemoveInputBox id="mib19"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,TAB,ENTER,TEST,BACKSPACE,DELETE" /></div>
@@ -260,7 +265,7 @@
 			<button>확인</button>	
 		</form>
 		
-
+		
 	</div>
 </body>
 </html>

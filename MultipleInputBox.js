@@ -394,11 +394,11 @@ var MultipleInputBox = (function(){
 						return false;
 					}
 
-				}else if(evt.which==13 ){
-					evt.stopPropagation();
-					evt.preventDefault();
-					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
-					return false;
+				// }else if(evt.which==13 ){
+				// 	evt.stopPropagation();
+				// 	evt.preventDefault();
+				// 	mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+				// 	return false;
 				}else if(evt.which==37 && evt.ctrlKey ){ //왼쪽
 					if(this.box.previousElementSibling){
 						this.box.previousElementSibling.text.focus();
