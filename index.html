@@ -130,6 +130,7 @@
 				<li>data-min //inputbox의 최소수 (data-removeEmptyBox 적용 시 동작 안한다!)</li>
 				<li>data-max //inputbox의 최대수</li>
 				<li>data-autoAddInputBox //tab or enter시 자동으로 inputbox를 새로 추가</li>
+				<li>data-autoAddInputBoxOnlyTap //tab으로만 자동으로 inputbox를 새로 추가(enter로 form의 onsubmit 동작 함)</li>
 				<li>data-autoRemoveInputBox //delete, backspace 시 자동 삭제</li>
 				<li>data-list //input 태그의 list의 값으로 설정</li>
 				<li>data-prefix //접두사 (value에는 영향 안 미침)</li>
@@ -235,6 +236,10 @@
 		<h2> data-autoRemoveInputBox //backspace와 delete 시 값이 없으면 inputbox 삭제</h2>
 		<input type="text" oninput="mib17.value = this.value;" value="" id="mib17-input"  />
 		<div class="multipleInputBox" data-autoRemoveInputBox id="mib17"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,BACKSPACE,DELETE" /></div>
+
+		<h2> data-autoAddInputBoxOnlyTap //탭으로만 inputbox 자동 추가</h2>
+		<input type="text" oninput="mib16.value = this.value;" value="" id="mib16-input"  />
+		<div class="multipleInputBox" data-autoAddInputBoxOnlyTap id="mib16"><input type="hidden"  class="multipleInputBox-sync" readOnly value="TEST,TAB,ENTER" /></div>
 
 		<h2> data-autoAddInputBox & data-autoRemoveInputBox </h2>
 		<form onsubmit="alert('submit')" action="">

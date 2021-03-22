@@ -346,6 +346,29 @@ var MultipleInputBox = (function(){
 					evt.preventDefault();
 					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
 					return false;
+				}else if(mib.hasAttribute('data-autoAddInputBoxOnlyTap') && (evt.which==9)){ //TAB
+					if(evt.shiftKey && !this.box.previousElementSibling){
+						return;
+					}else{
+						if(!evt.shiftKey && this.box.nextElementSibling){
+							this.box.nextElementSibling.text.focus()
+						}else if(evt.shiftKey && this.box.previousElementSibling){
+							this.box.previousElementSibling.text.focus()
+						}else if(this.value !=''){
+							var inputBox = mib.addInputBox()
+							if(inputBox){
+								inputBox.text.focus();
+							}else{
+								return false
+							}
+						}else{
+							return false
+						}
+					}
+					evt.stopPropagation();
+					evt.preventDefault();
+					mib.dispatchEvent((new CustomEvent('input',{bubbles: false, cancelable: false, detail: {}})));
+					return false;
 				}else if(mib.hasAttribute('data-autoRemoveInputBox') && (evt.which==8 || evt.which==46 )){
 					if(this.value.length==0){
 						if(evt.which==8){ //BACKSPACE
